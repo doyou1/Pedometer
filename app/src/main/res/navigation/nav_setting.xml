@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_setting"
+    app:startDestination="@id/fragment_setting_home">
+
+    <fragment
+        android:id="@+id/fragment_setting_home"
+        android:name="com.example.pedometer.fragment.setting.SettingHomeFragment" />
+
+    <fragment
+        android:id="@+id/fragment_setting_notifications"
+        android:name="com.example.pedometer.fragment.setting.SettingNotificationsFragment" />
+
+    <fragment
+        android:id="@+id/fragment_setting_language"
+        android:name="com.example.pedometer.fragment.setting.SettingLanguageFragment" />
+
+    <fragment
+        android:id="@+id/fragment_setting_privacy_security"
+        android:name="com.example.pedometer.fragment.setting.SettingPrivacySecurityFragment" />
+
+
+    <fragment
+        android:id="@+id/fragment_setting_help_support"
+        android:name="com.example.pedometer.fragment.setting.SettingHelpSupportFragment" />
+
+    <fragment
+        android:id="@+id/fragment_setting_about"
+        android:name="com.example.pedometer.fragment.setting.SettingAboutFragment" />
+
+    <action
+        android:id="@+id/action_home_to_notifications"
+        app:destination="@id/fragment_setting_notifications" />
+
+    <action
+        android:id="@+id/action_home_to_language"
+        app:destination="@id/fragment_setting_language" />
+
+    <action
+        android:id="@+id/action_home_to_privacy_security"
+        app:destination="@id/fragment_setting_privacy_security" />
+
+    <action
+        android:id="@+id/action_home_to_help_support"
+        app:destination="@id/fragment_setting_help_support" />
+
+    <action
+        android:id="@+id/action_home_to_about"
+        app:destination="@id/fragment_setting_about" />
+
+</navigation>
