@@ -47,8 +47,8 @@ class HistoryFragment : BaseFragment() {
     }
 
     private fun setChartDaily() {
-        val xvalue = Util.getChartDailyXValue(requireContext())
-        val barDataset = Util.getChartDailyDataSet(xvalue.size, requireContext())
+        val xvalue = DataUtil.getChartDailyXValue(requireContext())
+        val barDataset = DataUtil.getChartDailyDataSet(xvalue.size, requireContext())
         // gradient bar color
         barDataset.gradientColors = listOf(
             GradientColor(
@@ -145,8 +145,8 @@ class HistoryFragment : BaseFragment() {
     }
 
     private fun setChartWeek() {
-        val xvalue = Util.getChartWeekXValue()
-        val barDataset = Util.getChartWeekDataSet(xvalue.size, requireContext())
+        val xvalue = DataUtil.getChartWeekXValue()
+        val barDataset = DataUtil.getChartWeekDataSet(xvalue.size, requireContext())
         // gradient bar color
         barDataset.gradientColors = listOf(
             GradientColor(

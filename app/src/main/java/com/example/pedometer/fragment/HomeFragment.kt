@@ -10,13 +10,18 @@ import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
 import com.example.pedometer.adapter.WeekGoalAdapter
 import com.example.pedometer.databinding.FragmentHomeBinding
+import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class HomeFragment : BaseFragment() {
@@ -35,16 +40,29 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val item = DBHelper.getCurrent(requireContext())
+            lifecycleScope.launch(Dispatchers.Main) {
+                setWeekGoal()
+                setChart(item)
+                setText()
+            }
+        }
+
+    }
+
+    override fun updateCurrentSteps(item: Pedometer?) {
+        super.updateCurrentSteps(item)
         setWeekGoal()
-        setChart()
+        setChart(item)
         setText()
     }
 
     private fun setWeekGoal() {
-        binding.rvWeekGoal.adapter = WeekGoalAdapter(Util.getDataWeekGoal(requireContext()))
+        binding.rvWeekGoal.adapter = WeekGoalAdapter(DataUtil.getDataWeekGoal(requireContext()))
     }
 
-    private fun setChart() {
+    private fun setChart(item: Pedometer?) {
         binding.chartStep.description.isEnabled = false
         // radius of the center hole in percent of maximum radius
         binding.chartStep.holeRadius = HOLE_RADIUS_PIE_CHART
@@ -54,8 +72,10 @@ class HomeFragment : BaseFragment() {
         // disable drag
         binding.chartStep.isRotationEnabled = false
 
-        binding.chartStep.centerText = getCenterText()
-        binding.chartStep.data = getData()
+        if (item != null) {
+            binding.chartStep.centerText = "${getCenterText(DBUtil.computeSteps(item))}"
+            binding.chartStep.data = getData(DBUtil.computeSteps(item))
+        }
         binding.chartStep.animateY(DURATION_ANIMATION_Y)
         binding.chartStep.invalidate()
     }
@@ -66,8 +86,8 @@ class HomeFragment : BaseFragment() {
         binding.tvCaloriesData.text = "6913"
     }
 
-    private fun getCenterText(): SpannableString {
-        val centerText = "8513\nsteps"
+    private fun getCenterText(steps: Int): SpannableString {
+        val centerText = "$steps\nsteps"
         val index = centerText.indexOf("\n")
         val spannable = SpannableString(centerText)
         spannable.setSpan(
@@ -97,21 +117,24 @@ class HomeFragment : BaseFragment() {
         return spannable
     }
 
-    private fun getData(): PieData {
+    private fun getData(value: Int): PieData {
         val goal = if (activity != null && activity?.getSharedPreferences(
                 activity?.getString(R.string.text_goal),
                 Context.MODE_PRIVATE
             ) != null
         ) {
-            activity?.getSharedPreferences(activity?.getString(R.string.text_goal), Context.MODE_PRIVATE)!!
+            activity?.getSharedPreferences(
+                activity?.getString(R.string.text_goal),
+                Context.MODE_PRIVATE
+            )!!
                 .getInt(activity?.getString(R.string.text_goal), DEFAULT_GOAL)
         } else {
             DEFAULT_GOAL
         }
         val entries = arrayListOf<PieEntry>()
 //        val steps = 8513f
-        val steps = Random.nextInt(0, DEFAULT_GOAL).toFloat()
-        entries.add(PieEntry(steps, resources.getString(R.string.text_current_steps) ))
+        val steps = value.toFloat()
+        entries.add(PieEntry(steps, resources.getString(R.string.text_current_steps)))
         val minus = goal - steps
         if (minus <= 0) {
             // not working

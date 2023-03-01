@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-class Util {
+class DataUtil {
 
     companion object {
 
