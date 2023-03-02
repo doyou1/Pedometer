@@ -10,11 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.room.DBHelper
 import com.example.pedometer.room.Pedometer
+import com.example.pedometer.util.FLAG_HISTORY
+import com.example.pedometer.util.FLAG_HOME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 open class BaseFragment : Fragment(), SensorEventListener {
     private val TAG = this::class.java.simpleName
+
+    open val currentView = FLAG_HOME
 
     override fun onResume() {
         super.onResume()
@@ -39,20 +43,34 @@ open class BaseFragment : Fragment(), SensorEventListener {
                 updateSteps(context)
             }
         }
-
-        Log.d(TAG, "onSensorChanged")
     }
 
     private fun updateSteps(context: Context) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val item = DBHelper.getCurrent(context)
+            val current = DBHelper.getCurrent(context)
+            val currentDaily = DBHelper.getCurrentDaily(context)
+            val currentWeek = DBHelper.getCurrentWeek(context)
             lifecycleScope.launch(Dispatchers.Main) {
-                updateCurrentSteps(item)
+                when(currentView) {
+                    FLAG_HOME -> {
+                        updateCurrentSteps(current)
+                    }
+                    FLAG_HISTORY -> {
+                        updateCurrentDaily(currentDaily)
+                        updateCurrentWeek(currentWeek)
+                    }
+                }
             }
         }
     }
 
     open fun updateCurrentSteps(item: Pedometer?) {
+
+    }
+    open fun updateCurrentDaily(item: List<Pedometer>) {
+
+    }
+    open fun updateCurrentWeek(item: List<Pedometer>) {
 
     }
 

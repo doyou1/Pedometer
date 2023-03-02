@@ -44,7 +44,8 @@ class DBHelper {
                     Log.d(TAG, "steps: ${item.steps}")
                     val prevStepSum = DBUtil.getPrevStepSum(item.steps)
                     val currentSteps = steps - (item.initSteps + prevStepSum)
-                    val newSteps = DBUtil.addSteps(item.steps, DateUtil.getCurrentHour(), currentSteps)
+                    val newSteps =
+                        DBUtil.addSteps(item.steps, DateUtil.getCurrentHour(), currentSteps)
                     item.steps = newSteps
                     db.update(item)
                 }
@@ -60,7 +61,33 @@ class DBHelper {
             return@withContext db.getByDate(DateUtil.getCurrentDate())
         }
 
-        suspend fun getAll(context: Context) : List<Pedometer> = withContext(Dispatchers.IO) {
+        suspend fun getCurrentDaily(context: Context): List<Pedometer> =
+            withContext(Dispatchers.IO) {
+                val db = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDataBase::class.java,
+                    TEXT_PEDOMETER
+                ).build().pedometerDao()
+                return@withContext db.getDailyByDate(
+                    DateUtil.getOneMonthAgoDate(),
+                    DateUtil.getCurrentDate()
+                )
+            }
+
+        suspend fun getCurrentWeek(context: Context): List<Pedometer> =
+            withContext(Dispatchers.IO) {
+                val db = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDataBase::class.java,
+                    TEXT_PEDOMETER
+                ).build().pedometerDao()
+                return@withContext db.getWeekByDate(
+                    DateUtil.getOneMonthAgoDate(),
+                    DateUtil.getCurrentDate()
+                )
+            }
+
+        suspend fun getAll(context: Context): List<Pedometer> = withContext(Dispatchers.IO) {
             val db = Room.databaseBuilder(
                 context.applicationContext,
                 AppDataBase::class.java,

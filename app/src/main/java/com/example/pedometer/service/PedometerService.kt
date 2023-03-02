@@ -129,11 +129,11 @@ class PedometerService : Service(), SensorEventListener {
                 for (step in steps) {
                     sum += step.steps
                 }
-                "${DateUtil.getDate()} ${DateUtil.getTime()} Steps: $sum"
+                "${DateUtil.getFullToday()} ${DateUtil.getTime()} Steps: $sum"
             } else {
-                "${DateUtil.getDate()} ${DateUtil.getTime()} Steps: 0"
+                "${DateUtil.getFullToday()} ${DateUtil.getTime()} Steps: 0"
             }
-            notificationBuilder.setContentTitle(DateUtil.getDate()).setContentText(contentText)
+            notificationBuilder.setContentTitle(DateUtil.getFullToday()).setContentText(contentText)
             notificationBuilder.setPriority(Notification.PRIORITY_MIN)
                 .setShowWhen(false)
                 .setContentIntent(

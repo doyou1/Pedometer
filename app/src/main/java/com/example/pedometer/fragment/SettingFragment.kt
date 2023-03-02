@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.pedometer.databinding.FragmentSettingBinding
+import com.example.pedometer.util.FLAG_SETTING
 
 class SettingFragment : BaseFragment() {
 
     private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
-
     private val TAG = this::class.java.simpleName
+    override val currentView: Int = FLAG_SETTING
 
     override fun onCreateView(
         inflater: LayoutInflater,

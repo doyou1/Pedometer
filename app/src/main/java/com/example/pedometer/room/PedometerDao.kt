@@ -20,6 +20,12 @@ interface PedometerDao {
     @Query("SELECT * FROM Pedometer WHERE date = :date")
     fun getByDate(date: Long): Pedometer
 
+    @Query("SELECT * FROM Pedometer WHERE :start <= date and date <= :end order by date")
+    fun getDailyByDate(start: Long, end: Long): List<Pedometer>
+
+    @Query("SELECT * FROM Pedometer WHERE :start <= date and date <= :end order by date")
+    fun getWeekByDate(start: Long, end: Long): List<Pedometer>
+
     @Query("SELECT * FROM Pedometer")
     fun getAll() : List<Pedometer>
 }

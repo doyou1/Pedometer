@@ -1,6 +1,7 @@
 package com.example.pedometer.util
 
 import android.graphics.*
+import android.util.Log
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
@@ -74,6 +75,8 @@ class RoundBarChartRender(
                 i++;
             }
         }
+
+        if (mBarBuffers.isNullOrEmpty()) return
 
         // initialize the buffer
         val buffer = mBarBuffers[index];

@@ -3,9 +3,11 @@ package com.example.pedometer.util
 import android.content.Context
 import com.example.pedometer.R
 import com.example.pedometer.domain.WeekGoal
+import com.example.pedometer.room.Pedometer
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import java.text.SimpleDateFormat
+import java.time.temporal.ValueRange
 import java.util.*
 import kotlin.random.Random
 
@@ -15,15 +17,15 @@ class DataUtil {
 
         private val TAG = this::class.java.simpleName
 
-        fun getChartDailyXValue(context: Context) : List<String> {
+        fun getChartDailyXValue(context: Context): List<String> {
             val cal = Calendar.getInstance()
             val sdf = SimpleDateFormat("MM/dd")
             val today = sdf.format(cal.time)
             cal.add(Calendar.MONTH, -1)
             val xvalue = arrayListOf<String>()
-            while(true) {
+            while (true) {
                 val date = sdf.format(cal.time)
-                if(today != date) {
+                if (today != date) {
                     xvalue.add(date)
                 } else {
                     xvalue.add(context.getString(R.string.text_today))
@@ -35,7 +37,7 @@ class DataUtil {
             return xvalue
         }
 
-        fun getChartWeekXValue() : List<String> {
+        fun getChartWeekXValue(): List<String> {
             val cal = Calendar.getInstance()
             val sdf = SimpleDateFormat("MM/dd")
             cal.set(Calendar.DAY_OF_WEEK, 2)    // monday
@@ -44,11 +46,11 @@ class DataUtil {
             cal.add(Calendar.MONTH, -3) // 3 month ago
             cal.set(Calendar.DAY_OF_WEEK, 2)    // monday
             val xvalue = arrayListOf<String>()
-            while(true) {
+            while (true) {
                 val monday = sdf.format(cal.time)
                 cal.add(Calendar.DAY_OF_MONTH, 6)
                 val sunday = sdf.format(cal.time)
-                if(mondayOfThisWeek != monday) {
+                if (mondayOfThisWeek != monday) {
                     xvalue.add("$monday~$sunday")
                 } else {
                     xvalue.add("$mondayOfThisWeek~")
@@ -59,15 +61,31 @@ class DataUtil {
             return xvalue
         }
 
-        fun getChartDailyDataSet(size: Int, context: Context) : BarDataSet {
+        fun getChartDailyDataSet(
+            xvalues: List<String>,
+            list: List<Pedometer>,
+            context: Context
+        ): BarDataSet {
             val barEntries = arrayListOf<BarEntry>()
-            for (i in 0 until size) {
-                barEntries.add(BarEntry(i.toFloat(), Random.nextInt(0, 10000).toFloat()))
+            val c = Calendar.getInstance()
+            val sdf = SimpleDateFormat("MM/dd")
+            for (i in xvalues.indices) {
+                val xvalue =
+                    if (xvalues[i] == context.getString(R.string.text_today)) DateUtil.getToday() else xvalues[i]
+                val filter = list.filter { item ->
+                    c.timeInMillis = item.date
+                    xvalue == sdf.format(c.time)
+                }
+                if (filter.isNotEmpty()) {
+                    barEntries.add(BarEntry(i.toFloat(), DBUtil.computeSteps(filter[0]).toFloat()))
+                } else {
+                    barEntries.add(BarEntry(i.toFloat(), 0f))
+                }
             }
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
 
-        fun getChartWeekDataSet(size: Int, context: Context) : BarDataSet {
+        fun getChartWeekDataSet(size: Int, context: Context): BarDataSet {
             val barEntries = arrayListOf<BarEntry>()
             for (i in 0 until size) {
                 barEntries.add(BarEntry(i.toFloat(), (Random.nextInt(0, 10000) * 7).toFloat()))
@@ -75,7 +93,7 @@ class DataUtil {
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
 
-        fun getDataWeekGoal(context: Context) : List<WeekGoal> {
+        fun getDataWeekGoal(context: Context): List<WeekGoal> {
             return listOf(
                 WeekGoal(true, context.getString(R.string.text_sun)),
                 WeekGoal(true, context.getString(R.string.text_mon)),

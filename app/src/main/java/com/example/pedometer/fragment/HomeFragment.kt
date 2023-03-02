@@ -28,6 +28,7 @@ class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val TAG = this::class.java.simpleName
+    override val currentView: Int = FLAG_HOME
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,27 +39,18 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        lifecycleScope.launch(Dispatchers.IO) {
-            val item = DBHelper.getCurrent(requireContext())
-            lifecycleScope.launch(Dispatchers.Main) {
-                setWeekGoal()
-                setChart(item)
-                setText()
-            }
-        }
-
-    }
-
     override fun updateCurrentSteps(item: Pedometer?) {
         super.updateCurrentSteps(item)
-        setWeekGoal()
         setChart(item)
         setText()
     }
 
-    private fun setWeekGoal() {
+    override fun updateCurrentDaily(item: List<Pedometer>) {
+        super.updateCurrentDaily(item)
+        setWeekGoal(item)
+    }
+
+    private fun setWeekGoal(item: List<Pedometer>) {
         binding.rvWeekGoal.adapter = WeekGoalAdapter(DataUtil.getDataWeekGoal(requireContext()))
     }
 
@@ -77,7 +69,7 @@ class HomeFragment : BaseFragment() {
             binding.chartStep.data = getData(DBUtil.computeSteps(item))
         }
         binding.chartStep.animateY(DURATION_ANIMATION_Y)
-        binding.chartStep.invalidate()
+        binding.chartStep.postInvalidate()
     }
 
     private fun setText() {

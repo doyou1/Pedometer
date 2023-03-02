@@ -26,5 +26,7 @@ const val MICROSECONDS_IN_ONE_MINUTE: Long = 60000000
 const val PEDOMETER_NOTIFICATION_ID = 1
 const val PEDOMETER_NOTIFICATION_CHANNEL_ID = "Pedometer Notification"
 const val TEXT_PEDOMETER = "pedometer"
-
+const val FLAG_HOME = 0
+const val FLAG_HISTORY = 1
+const val FLAG_SETTING = 2
 
