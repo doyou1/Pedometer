@@ -82,7 +82,7 @@ class DBUtil {
         }
 
         fun stepsToString(item: Pedometer): String {
-            var result = "date: ${DateUtil.convertDate(item.date)} \n"
+            var result = "date: ${DateUtil.convertDate(item.timestamp)} \n"
             result += "initSteps: ${item.initSteps} \n"
             val steps = fromStepsJson(item.steps)
             for (step in steps) {

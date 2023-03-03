@@ -26,13 +26,14 @@ class DBHelper {
 
             GlobalScope.launch(Dispatchers.IO) {
                 // 오늘에 대한 레코드 있는지 확인
-                val result = db.existByDate(DateUtil.getCurrentDate())
+                val result = db.existByDate(DateUtil.getCurrentTimestamp())
                 // 레코드 없으면
                 if (result == 0) {
                     // insert
                     val pedometer = Pedometer(
                         0,
-                        DateUtil.getCurrentDate(),
+                        DateUtil.getCurrentTimestamp(),
+                        DateUtil.getFullToday(),
                         steps,
                         Gson().toJson(Steps(listOf()))
                     )
@@ -40,7 +41,7 @@ class DBHelper {
                 }
                 // 레코드 있으면
                 else {
-                    val item = db.getByDate(DateUtil.getCurrentDate())
+                    val item = db.getByDate(DateUtil.getCurrentTimestamp())
                     Log.d(TAG, "steps: ${item.steps}")
                     val prevStepSum = DBUtil.getPrevStepSum(item.steps)
                     val currentSteps = steps - (item.initSteps + prevStepSum)
@@ -58,7 +59,7 @@ class DBHelper {
                 AppDataBase::class.java,
                 TEXT_PEDOMETER
             ).build().pedometerDao()
-            return@withContext db.getByDate(DateUtil.getCurrentDate())
+            return@withContext db.getByDate(DateUtil.getCurrentTimestamp())
         }
 
         suspend fun getCurrentDaily(context: Context): List<Pedometer> =
@@ -70,7 +71,7 @@ class DBHelper {
                 ).build().pedometerDao()
                 return@withContext db.getDailyByDate(
                     DateUtil.getOneMonthAgoDate(),
-                    DateUtil.getCurrentDate()
+                    DateUtil.getCurrentTimestamp()
                 )
             }
 
@@ -82,8 +83,8 @@ class DBHelper {
                     TEXT_PEDOMETER
                 ).build().pedometerDao()
                 return@withContext db.getWeekByDate(
-                    DateUtil.getOneMonthAgoDate(),
-                    DateUtil.getCurrentDate()
+                    DateUtil.getThreeMonthAgoDate(),
+                    DateUtil.getCurrentTimestamp()
                 )
             }
 

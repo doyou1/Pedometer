@@ -24,7 +24,7 @@ class DateUtil {
             return sdf.format(cal.time)
         }
 
-        fun getOneMonthAgoDate() : Long {
+        fun getOneMonthAgoDate(): Long {
             val c = Calendar.getInstance()
             c.timeInMillis = System.currentTimeMillis();
             c.add(Calendar.MONTH, -1)
@@ -35,7 +35,19 @@ class DateUtil {
             return c.timeInMillis
         }
 
-        fun getCurrentDate(): Long {
+        fun getThreeMonthAgoDate(): Long {
+            val c = Calendar.getInstance()
+            c.timeInMillis = System.currentTimeMillis();
+            c.add(Calendar.MONTH, -1)
+            c.set(Calendar.DAY_OF_WEEK, 2)    // monday
+            c.set(Calendar.HOUR_OF_DAY, 0)
+            c.set(Calendar.MINUTE, 0)
+            c.set(Calendar.SECOND, 0)
+            c.set(Calendar.MILLISECOND, 0)
+            return c.timeInMillis
+        }
+
+        fun getCurrentTimestamp(): Long {
             val c = Calendar.getInstance()
             c.timeInMillis = System.currentTimeMillis();
             c.set(Calendar.HOUR_OF_DAY, 0);

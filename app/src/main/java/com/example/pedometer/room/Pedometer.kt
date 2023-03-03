@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class Pedometer(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val date: Long,
+    val timestamp: Long,
+    val yyyymmdd: String,
     val initSteps: Int,
     // 10분마다의 걸음 수 배열이 저장됨
     // "[{"0010": 10}, {"0020": 20}, {"0030": 30}, ....]"

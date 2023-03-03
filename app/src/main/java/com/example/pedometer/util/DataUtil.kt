@@ -7,7 +7,6 @@ import com.example.pedometer.room.Pedometer
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import java.text.SimpleDateFormat
-import java.time.temporal.ValueRange
 import java.util.*
 import kotlin.random.Random
 
@@ -73,7 +72,7 @@ class DataUtil {
                 val xvalue =
                     if (xvalues[i] == context.getString(R.string.text_today)) DateUtil.getToday() else xvalues[i]
                 val filter = list.filter { item ->
-                    c.timeInMillis = item.date
+                    c.timeInMillis = item.timestamp
                     xvalue == sdf.format(c.time)
                 }
                 if (filter.isNotEmpty()) {
