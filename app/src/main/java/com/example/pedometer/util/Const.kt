@@ -45,3 +45,7 @@ const val STATUS_SUCCESS = 0
 const val STATUS_FAIL = 1
 
 const val VALUE_THREE_SECONDS = 3000L
+
+const val DISTANCE_PER_STEPS = 50
+const val MINUTES_PER_STEPS = 130
+const val CALORIES_PER_STEPS = 400 / 10000

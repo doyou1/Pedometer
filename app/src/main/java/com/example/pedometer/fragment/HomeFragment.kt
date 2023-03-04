@@ -52,7 +52,7 @@ class HomeFragment : BaseFragment() {
     override fun updateCurrentSteps(item: Pedometer?) {
         super.updateCurrentSteps(item)
         setChart(item)
-        setText()
+        setText(item)
     }
 
     override fun updateCurrentDaily(item: List<Pedometer>) {
@@ -83,10 +83,22 @@ class HomeFragment : BaseFragment() {
         binding.chartStep.invalidate()
     }
 
-    private fun setText() {
-        binding.tvDistanceData.text = "12.7"
-        binding.tvMinutesData.text = "152"
-        binding.tvCaloriesData.text = "6913"
+    private fun setText(item: Pedometer?) {
+        if (item != null) {
+            val steps = DBUtil.computeSteps(item)
+
+            // distance per 1steps
+            binding.tvDistanceData.text = "${(steps * DISTANCE_PER_STEPS) / 1000}"
+            binding.tvMinutesData.text = "${steps / MINUTES_PER_STEPS}"
+            // 400 calories per 10,000 steps
+            binding.tvCaloriesData.text = "${steps * CALORIES_PER_STEPS}"
+        } else {
+            binding.tvDistanceData.text = "0"
+            binding.tvMinutesData.text = "0"
+            binding.tvCaloriesData.text = "0"
+        }
+
+
     }
 
     private fun getCenterText(steps: Int): SpannableString {

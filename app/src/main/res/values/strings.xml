@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Pedometer</string>
-    <string name="distance_unit">KM</string>
-    <string name="minutes_unit">MINUTES</string>
-    <string name="calories_unit">CALORIES</string>
+    <string name="distance_unit">≒KM</string>
+    <string name="minutes_unit">≒MINUTES</string>
+    <string name="calories_unit">≒CALORIES</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_update_goal">Update Goal Steps</string>
     <string name="text_notifications">Notifications</string>

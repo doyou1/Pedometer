@@ -154,7 +154,7 @@ class PedometerService : Service(), SensorEventListener {
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
                     )
                 )
-                .setSmallIcon(R.drawable.ic_baseline_run_circle_24)
+                .setSmallIcon(R.drawable.ic_baseline_directions_run_24)
                 .setOngoing(true)
             return@withContext notificationBuilder.build()
         }
