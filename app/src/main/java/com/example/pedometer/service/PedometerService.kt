@@ -28,7 +28,14 @@ class PedometerService : Service(), SensorEventListener {
 
         reRegisterStepCounter()
         registerShutdownReceiver()
-        showPedometerNotification()
+
+        if (applicationContext.getSharedPreferences(TEXT_NOTI_REPEAT, Context.MODE_PRIVATE)
+                .getBoolean(
+                    TEXT_ONOFF, true
+                )
+        ) {
+            showPedometerNotification()
+        }
         setRepeatAlarm()
 
         return START_STICKY

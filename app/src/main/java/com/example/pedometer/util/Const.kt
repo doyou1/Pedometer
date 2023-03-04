@@ -1,5 +1,7 @@
 package com.example.pedometer.util
 
+import android.content.Context
+
 const val DEFAULT_GOAL = 10000
 const val SIZE_GOAL_LINE = 24f
 const val SIZE_GOAL_LINE_WIDTH = 8f
@@ -36,6 +38,10 @@ const val STATUS_NOT_YET = 2
 const val TEXT_INIT = "init"
 const val TEXT_NOTI_REPEAT = "notirepeat"
 const val TEXT_VALUE = "value"
+const val TEXT_ONOFF = "onoff"
 
 const val DEFAULT_VALUE_TEN_MINUTES = 10 * 60 * 1000
+const val STATUS_SUCCESS = 0
+const val STATUS_FAIL = 1
 
+const val VALUE_THREE_SECONDS = 3000L
