@@ -96,7 +96,6 @@ class PedometerService : Service(), SensorEventListener {
             Intent(this, PedometerService::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
-
         if (Build.VERSION.SDK_INT >= 23) {
             am.setAndAllowWhileIdle(AlarmManager.RTC, nextTime, pendingIntent)
         } else {

@@ -46,6 +46,8 @@ const val STATUS_FAIL = 1
 
 const val VALUE_THREE_SECONDS = 3000L
 
-const val DISTANCE_PER_STEPS = 50
-const val MINUTES_PER_STEPS = 130
-const val CALORIES_PER_STEPS = 400 / 10000
+// distance per 1 steps(0.5m, 50cm)
+const val DISTANCE_PER_STEPS = 0.5
+// steps per 1 minutes(100steps)
+const val MINUTES_PER_STEPS = 100
+const val CALORIES_PER_STEPS = 400.0 / 10000.0

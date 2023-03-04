@@ -88,17 +88,15 @@ class HomeFragment : BaseFragment() {
             val steps = DBUtil.computeSteps(item)
 
             // distance per 1steps
-            binding.tvDistanceData.text = "${(steps * DISTANCE_PER_STEPS) / 1000}"
+            binding.tvDistanceData.text = "${(steps * DISTANCE_PER_STEPS) / 1000.0}"
             binding.tvMinutesData.text = "${steps / MINUTES_PER_STEPS}"
             // 400 calories per 10,000 steps
-            binding.tvCaloriesData.text = "${steps * CALORIES_PER_STEPS}"
+            binding.tvCaloriesData.text = "${steps.toFloat() * CALORIES_PER_STEPS}"
         } else {
             binding.tvDistanceData.text = "0"
             binding.tvMinutesData.text = "0"
             binding.tvCaloriesData.text = "0"
         }
-
-
     }
 
     private fun getCenterText(steps: Int): SpannableString {
