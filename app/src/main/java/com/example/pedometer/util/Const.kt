@@ -33,3 +33,9 @@ const val STATUS_REACHED = 0
 const val STATUS_RUN = 1
 const val STATUS_NOT_YET = 2
 
+const val TEXT_INIT = "init"
+const val TEXT_NOTI_REPEAT = "notirepeat"
+const val TEXT_VALUE = "value"
+
+const val DEFAULT_VALUE_TEN_MINUTES = 10 * 60 * 1000
+

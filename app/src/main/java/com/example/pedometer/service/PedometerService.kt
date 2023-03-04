@@ -77,8 +77,11 @@ class PedometerService : Service(), SensorEventListener {
     }
 
     private fun setRepeatAlarm() {
-        // after 10 minute
-        val nextTime = System.currentTimeMillis() + (10 * 60 * 1000)
+        val repeatTime =
+            applicationContext.getSharedPreferences(TEXT_NOTI_REPEAT, Context.MODE_PRIVATE)
+                .getInt(TEXT_VALUE, DEFAULT_VALUE_TEN_MINUTES)
+        // default repeat time (after 10 minute)
+        val nextTime = System.currentTimeMillis() + repeatTime
         val am = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = PendingIntent.getService(
             applicationContext,
