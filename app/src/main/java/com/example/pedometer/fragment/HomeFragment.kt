@@ -39,6 +39,16 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val currentDaily = DBHelper.getCurrentDaily(requireContext())
+            lifecycleScope.launch(Dispatchers.Main) {
+                setWeekGoal(currentDaily)
+            }
+        }
+    }
+
     override fun updateCurrentSteps(item: Pedometer?) {
         super.updateCurrentSteps(item)
         setChart(item)
@@ -51,7 +61,8 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setWeekGoal(item: List<Pedometer>) {
-        binding.rvWeekGoal.adapter = WeekGoalAdapter(DataUtil.getDataWeekGoal(requireContext()))
+        binding.rvWeekGoal.adapter =
+            WeekGoalAdapter(DataUtil.getDataWeekGoal(item, requireContext()), requireContext())
     }
 
     private fun setChart(item: Pedometer?) {

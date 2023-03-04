@@ -105,6 +105,7 @@ class DataUtil {
                 if (item.sunday != 0L) {
                     val filter =
                         list.filter { pedometer -> item.monday <= pedometer.timestamp && pedometer.timestamp <= item.sunday }
+
                     barEntries.add(
                         BarEntry(
                             i.toFloat(),
@@ -126,16 +127,61 @@ class DataUtil {
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
 
-        fun getDataWeekGoal(context: Context): List<WeekGoal> {
-            return listOf(
-                WeekGoal(true, context.getString(R.string.text_sun)),
-                WeekGoal(true, context.getString(R.string.text_mon)),
-                WeekGoal(false, context.getString(R.string.text_tue)),
-                WeekGoal(false, context.getString(R.string.text_wed)),
-                WeekGoal(false, context.getString(R.string.text_thu)),
-                WeekGoal(false, context.getString(R.string.text_fri)),
-                WeekGoal(false, context.getString(R.string.text_sat)),
+        fun getDataWeekGoal(list: List<Pedometer>, context: Context): List<WeekGoal> {
+            val c = Calendar.getInstance()
+            c.set(Calendar.DAY_OF_WEEK, 1)    // monday
+            c.set(Calendar.HOUR_OF_DAY, 0)
+            c.set(Calendar.MINUTE, 0)
+            c.set(Calendar.SECOND, 0)
+            c.set(Calendar.MILLISECOND, 0)
+            val longSun = c.timeInMillis
+            c.add(Calendar.DAY_OF_MONTH, 6)
+            val longSat = c.timeInMillis
+
+            val filter =
+                list.filter { item -> item.timestamp in longSun..longSat }.sortedBy { it.timestamp }
+            val goal = if (context.getSharedPreferences(
+                    context.getString(R.string.text_goal),
+                    Context.MODE_PRIVATE
+                ) != null
+            ) {
+                context.getSharedPreferences(
+                    context.getString(R.string.text_goal),
+                    Context.MODE_PRIVATE
+                )!!
+                    .getInt(context.getString(R.string.text_goal), DEFAULT_GOAL)
+            } else {
+                DEFAULT_GOAL
+            }
+
+            val result = arrayListOf(
+                WeekGoal(-1, context.getString(R.string.text_sun)),
+                WeekGoal(-1, context.getString(R.string.text_mon)),
+                WeekGoal(-1, context.getString(R.string.text_tue)),
+                WeekGoal(-1, context.getString(R.string.text_wed)),
+                WeekGoal(-1, context.getString(R.string.text_thu)),
+                WeekGoal(-1, context.getString(R.string.text_fri)),
+                WeekGoal(-1, context.getString(R.string.text_sat)),
             )
+            c.set(Calendar.DAY_OF_WEEK, 1)    // monday of this week
+            for (i in result.indices) {
+                val time = c.timeInMillis
+                val f = filter.filter { item -> item.timestamp == time }
+                if (f.isNotEmpty()) {
+                    val steps = DBUtil.computeSteps(f[0])
+                    if (steps >= goal) {
+                        result[i].status = STATUS_REACHED    // over than goal
+                    } else if (steps > 0) {
+                        result[i].status = STATUS_RUN    // less than goal, but not 0
+                    } else {
+                        result[i].status = STATUS_NOT_YET    // 0
+                    }
+                } else {
+                    result[i].status = STATUS_NOT_YET    // no steps
+                }
+                c.add(Calendar.DAY_OF_MONTH, 1)
+            }
+            return result
         }
 
 

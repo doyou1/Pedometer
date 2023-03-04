@@ -29,4 +29,7 @@ const val TEXT_PEDOMETER = "pedometer"
 const val FLAG_HOME = 0
 const val FLAG_HISTORY = 1
 const val FLAG_SETTING = 2
+const val STATUS_REACHED = 0
+const val STATUS_RUN = 1
+const val STATUS_NOT_YET = 2
 
