@@ -41,6 +41,8 @@ class DataUtil {
         fun getChartWeekPeriods(): List<Period> {
             val sdf = SimpleDateFormat("MM/dd")
             val c = Calendar.getInstance()
+            val longToday = c.timeInMillis
+
             c.set(Calendar.DAY_OF_WEEK, 2)    // monday
             val strThisMon = sdf.format(c.time)
 
@@ -60,7 +62,8 @@ class DataUtil {
 
                 if (strThisMon != strMon) {
                     periods.add(Period("$strMon~$strSun", longMon, longSun))
-                } else {
+                } else if (longToday < longMon) break
+                else {
                     periods.add(Period("$strThisMon~", longMon, 0))
                     break
                 }
