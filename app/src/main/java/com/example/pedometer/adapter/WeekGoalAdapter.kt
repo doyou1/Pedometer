@@ -44,8 +44,8 @@ class WeekGoalAdapter(private val _list: List<WeekGoal>, private val context: Co
                     binding.tvWeekGoal.setTextColor(context.resources.getColor(R.color.app_color))
                 }
                 STATUS_RUN -> {
-                    binding.ivWeekGoal.setColorFilter(context.resources.getColor(R.color.app_orange))
-                    binding.tvWeekGoal.setTextColor(context.resources.getColor(R.color.app_orange))
+                    binding.ivWeekGoal.setColorFilter(context.resources.getColor(R.color.run))
+                    binding.tvWeekGoal.setTextColor(context.resources.getColor(R.color.run))
                 }
                 STATUS_NOT_YET -> {
                     binding.ivWeekGoal.setColorFilter(context.resources.getColor(R.color.not_yet))

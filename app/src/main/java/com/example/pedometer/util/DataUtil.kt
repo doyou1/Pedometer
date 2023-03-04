@@ -128,18 +128,21 @@ class DataUtil {
         }
 
         fun getDataWeekGoal(list: List<Pedometer>, context: Context): List<WeekGoal> {
+            val sdf = SimpleDateFormat("yyyyMMdd")
             val c = Calendar.getInstance()
-            c.set(Calendar.DAY_OF_WEEK, 1)    // monday
+            // Calendar Instance System : Sun ~ Mon
+            // Custom System : Mon ~ Sun
+            if (c.get(Calendar.DAY_OF_WEEK) == 1) c.add(Calendar.WEEK_OF_YEAR, -1)
+            c.set(Calendar.DAY_OF_WEEK, 2)    // monday
             c.set(Calendar.HOUR_OF_DAY, 0)
             c.set(Calendar.MINUTE, 0)
             c.set(Calendar.SECOND, 0)
             c.set(Calendar.MILLISECOND, 0)
-            val longSun = c.timeInMillis
+            val longMon = c.timeInMillis
             c.add(Calendar.DAY_OF_MONTH, 6)
-            val longSat = c.timeInMillis
-
+            val longSun = c.timeInMillis
             val filter =
-                list.filter { item -> item.timestamp in longSun..longSat }.sortedBy { it.timestamp }
+                list.filter { item -> item.timestamp in longMon..longSun }.sortedBy { it.timestamp }
             val goal = if (context.getSharedPreferences(
                     context.getString(R.string.text_goal),
                     Context.MODE_PRIVATE
@@ -155,15 +158,18 @@ class DataUtil {
             }
 
             val result = arrayListOf(
-                WeekGoal(-1, context.getString(R.string.text_sun)),
                 WeekGoal(-1, context.getString(R.string.text_mon)),
                 WeekGoal(-1, context.getString(R.string.text_tue)),
                 WeekGoal(-1, context.getString(R.string.text_wed)),
                 WeekGoal(-1, context.getString(R.string.text_thu)),
                 WeekGoal(-1, context.getString(R.string.text_fri)),
                 WeekGoal(-1, context.getString(R.string.text_sat)),
+                WeekGoal(-1, context.getString(R.string.text_sun)),
             )
-            c.set(Calendar.DAY_OF_WEEK, 1)    // monday of this week
+            // Calendar Instance System : Sun ~ Mon
+            // Custom System : Mon ~ Sun
+            if (c.get(Calendar.DAY_OF_WEEK) == 1) c.add(Calendar.WEEK_OF_YEAR, -1)
+            c.set(Calendar.DAY_OF_WEEK, 2)    // monday of this week
             for (i in result.indices) {
                 val time = c.timeInMillis
                 val f = filter.filter { item -> item.timestamp == time }
@@ -183,7 +189,5 @@ class DataUtil {
             }
             return result
         }
-
-
     }
 }
