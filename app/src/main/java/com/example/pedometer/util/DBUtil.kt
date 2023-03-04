@@ -81,6 +81,25 @@ class DBUtil {
             return sum
         }
 
+        fun computeMaxSteps(list: List<Pedometer>) : Int {
+            var max = 0
+            for(item in list) {
+                val value = computeSteps(item)
+                if(max < value) {
+                    max = value
+                }
+            }
+            return max
+        }
+
+        fun computeSumSteps(list: List<Pedometer>) : Int {
+            var sum = 0
+            for(item in list) {
+                sum += computeSteps(item)
+            }
+            return sum
+        }
+
         fun stepsToString(item: Pedometer): String {
             var result = "date: ${DateUtil.convertDate(item.timestamp)} \n"
             result += "initSteps: ${item.initSteps} \n"

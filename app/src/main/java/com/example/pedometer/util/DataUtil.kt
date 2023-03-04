@@ -1,7 +1,9 @@
 package com.example.pedometer.util
 
 import android.content.Context
+import android.util.Log
 import com.example.pedometer.R
+import com.example.pedometer.domain.Period
 import com.example.pedometer.domain.WeekGoal
 import com.example.pedometer.room.Pedometer
 import com.github.mikephil.charting.data.BarDataSet
@@ -36,28 +38,35 @@ class DataUtil {
             return xvalue
         }
 
-        fun getChartWeekXValue(): List<String> {
-            val cal = Calendar.getInstance()
+        fun getChartWeekPeriods(): List<Period> {
             val sdf = SimpleDateFormat("MM/dd")
-            cal.set(Calendar.DAY_OF_WEEK, 2)    // monday
+            val c = Calendar.getInstance()
+            c.set(Calendar.DAY_OF_WEEK, 2)    // monday
+            val strThisMon = sdf.format(c.time)
 
-            val mondayOfThisWeek = sdf.format(cal.time)
-            cal.add(Calendar.MONTH, -3) // 3 month ago
-            cal.set(Calendar.DAY_OF_WEEK, 2)    // monday
-            val xvalue = arrayListOf<String>()
+            c.add(Calendar.MONTH, -3) // 3 month ago
+            c.set(Calendar.DAY_OF_WEEK, 2)    // monday
+            c.set(Calendar.HOUR_OF_DAY, 0)
+            c.set(Calendar.MINUTE, 0)
+            c.set(Calendar.SECOND, 0)
+            c.set(Calendar.MILLISECOND, 0)
+            val periods = arrayListOf<Period>()
             while (true) {
-                val monday = sdf.format(cal.time)
-                cal.add(Calendar.DAY_OF_MONTH, 6)
-                val sunday = sdf.format(cal.time)
-                if (mondayOfThisWeek != monday) {
-                    xvalue.add("$monday~$sunday")
+                val strMon = sdf.format(c.time)
+                val longMon = c.timeInMillis
+                c.add(Calendar.DAY_OF_MONTH, 6)
+                val strSun = sdf.format(c.time)
+                val longSun = c.timeInMillis
+
+                if (strThisMon != strMon) {
+                    periods.add(Period("$strMon~$strSun", longMon, longSun))
                 } else {
-                    xvalue.add("$mondayOfThisWeek~")
+                    periods.add(Period("$strThisMon~", longMon, 0))
                     break
                 }
-                cal.add(Calendar.DAY_OF_MONTH, 1)
+                c.add(Calendar.DAY_OF_MONTH, 1)
             }
-            return xvalue
+            return periods
         }
 
         fun getChartDailyDataSet(
@@ -84,10 +93,35 @@ class DataUtil {
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
 
-        fun getChartWeekDataSet(size: Int, context: Context): BarDataSet {
+        fun getChartWeekDataSet(
+            periods: List<Period>,
+            list: List<Pedometer>,
+            context: Context
+        ): BarDataSet {
             val barEntries = arrayListOf<BarEntry>()
-            for (i in 0 until size) {
-                barEntries.add(BarEntry(i.toFloat(), (Random.nextInt(0, 10000) * 7).toFloat()))
+            for (i in periods.indices) {
+                val item = periods[i]
+                // past week
+                if (item.sunday != 0L) {
+                    val filter =
+                        list.filter { pedometer -> item.monday <= pedometer.timestamp && pedometer.timestamp <= item.sunday }
+                    barEntries.add(
+                        BarEntry(
+                            i.toFloat(),
+                            (DBUtil.computeSumSteps(filter)).toFloat()
+                        )
+                    )
+                }
+                // this week
+                else {
+                    val filter = list.filter { pedometer -> item.monday <= pedometer.timestamp }
+                    barEntries.add(
+                        BarEntry(
+                            i.toFloat(),
+                            (DBUtil.computeSumSteps(filter)).toFloat()
+                        )
+                    )
+                }
             }
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
@@ -103,5 +137,7 @@ class DataUtil {
                 WeekGoal(false, context.getString(R.string.text_sat)),
             )
         }
+
+
     }
 }

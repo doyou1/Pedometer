@@ -69,7 +69,7 @@ class HomeFragment : BaseFragment() {
             binding.chartStep.data = getData(DBUtil.computeSteps(item))
         }
         binding.chartStep.animateY(DURATION_ANIMATION_Y)
-        binding.chartStep.postInvalidate()
+        binding.chartStep.invalidate()
     }
 
     private fun setText() {

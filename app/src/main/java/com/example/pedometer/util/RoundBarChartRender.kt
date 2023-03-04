@@ -76,7 +76,7 @@ class RoundBarChartRender(
             }
         }
 
-        if (mBarBuffers.isNullOrEmpty()) return
+        if (mBarBuffers.isNullOrEmpty()) initBuffers()
 
         // initialize the buffer
         val buffer = mBarBuffers[index];

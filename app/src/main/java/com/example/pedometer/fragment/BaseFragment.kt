@@ -49,15 +49,14 @@ open class BaseFragment : Fragment(), SensorEventListener {
         lifecycleScope.launch(Dispatchers.IO) {
             val current = DBHelper.getCurrent(context)
             val currentDaily = DBHelper.getCurrentDaily(context)
-            val currentWeek = DBHelper.getCurrentWeek(context)
             lifecycleScope.launch(Dispatchers.Main) {
                 when(currentView) {
                     FLAG_HOME -> {
                         updateCurrentSteps(current)
+                        updateCurrentDaily(currentDaily)
                     }
                     FLAG_HISTORY -> {
-                        updateCurrentDaily(currentDaily)
-                        updateCurrentWeek(currentWeek)
+
                     }
                 }
             }
@@ -70,9 +69,9 @@ open class BaseFragment : Fragment(), SensorEventListener {
     open fun updateCurrentDaily(item: List<Pedometer>) {
 
     }
-    open fun updateCurrentWeek(item: List<Pedometer>) {
-
-    }
+//    open fun updateCurrentWeek(item: List<Pedometer>) {
+//
+//    }
 
     override fun onPause() {
         super.onPause()

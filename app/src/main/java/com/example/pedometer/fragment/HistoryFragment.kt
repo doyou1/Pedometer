@@ -2,12 +2,13 @@ package com.example.pedometer.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
 import com.example.pedometer.databinding.FragmentHistoryBinding
+import com.example.pedometer.room.DBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
 import com.github.mikephil.charting.components.LimitLine
@@ -15,7 +16,8 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.model.GradientColor
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HistoryFragment : BaseFragment() {
 
@@ -35,6 +37,21 @@ class HistoryFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val currentDaily = DBHelper.getCurrentDaily(requireContext())
+            val currentWeek = DBHelper.getCurrentWeek(requireContext())
+            lifecycleScope.launch(Dispatchers.Main) {
+                when (currentView) {
+                    FLAG_HISTORY -> {
+                        setChartDaily(currentDaily)
+                        setChartDailyAverageLine()
+                        setChartWeek(currentWeek)
+                        setChartWeekAverageLine()
+                    }
+                }
+            }
+        }
+
         binding.chartDaily.setOnTouchListener { _, _ ->
             setChartDailyAverageLine()
             false
@@ -43,18 +60,6 @@ class HistoryFragment : BaseFragment() {
             setChartWeekAverageLine()
             false
         }
-    }
-
-    override fun updateCurrentDaily(item: List<Pedometer>) {
-        super.updateCurrentDaily(item)
-        setChartDaily(item)
-        setChartDailyAverageLine()
-    }
-
-    override fun updateCurrentWeek(item: List<Pedometer>) {
-        super.updateCurrentWeek(item)
-        setChartWeek(item)
-        setChartWeekAverageLine()
     }
 
     private fun setChartDaily(item: List<Pedometer>) {
@@ -101,16 +106,19 @@ class HistoryFragment : BaseFragment() {
         binding.chartDaily.axisLeft.setDrawAxisLine(false)
         binding.chartDaily.axisLeft.setDrawGridLines(false)
         binding.chartDaily.axisLeft.axisMinimum = 0f
-        binding.chartDaily.axisLeft.axisMaximum = (goal + (goal / 10)).toFloat()
+        binding.chartDaily.axisLeft.axisMaximum =
+            if (DBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (DBUtil.computeMaxSteps(item) + (DBUtil.computeMaxSteps(
+                item
+            ) / 10).toFloat()) else (goal + (goal / 10)).toFloat()
         binding.chartDaily.axisRight.isEnabled = false
 
-//        val chartRenderer = RoundBarChartRender(
-//            binding.chartDaily,
-//            binding.chartDaily.animator,
-//            binding.chartDaily.viewPortHandler
-//        )
-//        chartRenderer.setRadius(SIZE_RADIUS)
-//        binding.chartDaily.renderer = chartRenderer
+        val chartRenderer = RoundBarChartRender(
+            binding.chartDaily,
+            binding.chartDaily.animator,
+            binding.chartDaily.viewPortHandler
+        )
+        chartRenderer.setRadius(SIZE_RADIUS)
+        binding.chartDaily.renderer = chartRenderer
         binding.chartDaily.xAxis.textColor = resources.getColor(R.color.app_color)
         binding.chartDaily.xAxis.spaceMin = SIZE_SPACE
         binding.chartDaily.xAxis.spaceMax = SIZE_SPACE
@@ -128,10 +136,10 @@ class HistoryFragment : BaseFragment() {
         // xAxis print 6 item of one time, add horizontal scroll
         binding.chartDaily.setVisibleXRangeMaximum(SIZE_X_RANGE_MAXIMUM)
         // show most right, most last item
-        binding.chartDaily.moveViewToX(xvalue.size.toFloat())
+        binding.chartDaily.moveViewToX((xvalue.size).toFloat())
 
         binding.chartDaily.animateY(DURATION_ANIMATION_Y)
-        binding.chartDaily.postInvalidate()
+        binding.chartDaily.invalidate()
     }
 
     private fun setChartDailyAverageLine() {
@@ -164,8 +172,13 @@ class HistoryFragment : BaseFragment() {
     }
 
     private fun setChartWeek(item: List<Pedometer>) {
-        val xvalue = DataUtil.getChartWeekXValue()
-        val barDataset = DataUtil.getChartWeekDataSet(xvalue.size, requireContext())
+        val periods = DataUtil.getChartWeekPeriods()
+        val xvalue = arrayListOf<String>()
+        for (item in periods) {
+            xvalue.add(item.period)
+        }
+
+        val barDataset = DataUtil.getChartWeekDataSet(periods, item, requireContext())
         // gradient bar color
         barDataset.gradientColors = listOf(
             GradientColor(
@@ -207,16 +220,20 @@ class HistoryFragment : BaseFragment() {
         binding.chartWeek.axisLeft.setDrawAxisLine(false)
         binding.chartWeek.axisLeft.setDrawGridLines(false)
         binding.chartWeek.axisLeft.axisMinimum = 0f
-        binding.chartWeek.axisLeft.axisMaximum = (goal + (goal / 10)).toFloat()
+        binding.chartWeek.axisLeft.axisMaximum =
+            if (DBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (DBUtil.computeMaxSteps(item) + (DBUtil.computeMaxSteps(
+                item
+            ) / 10).toFloat()) else (goal + (goal / 10)).toFloat()
+
         binding.chartWeek.axisRight.isEnabled = false
 
-//        val chartRenderer = RoundBarChartRender(
-//            binding.chartWeek,
-//            binding.chartWeek.animator,
-//            binding.chartWeek.viewPortHandler
-//        )
-//        chartRenderer.setRadius(SIZE_RADIUS)
-//        binding.chartWeek.renderer = chartRenderer
+        val chartRenderer = RoundBarChartRender(
+            binding.chartWeek,
+            binding.chartWeek.animator,
+            binding.chartWeek.viewPortHandler
+        )
+        chartRenderer.setRadius(SIZE_RADIUS)
+        binding.chartWeek.renderer = chartRenderer
         binding.chartWeek.xAxis.textColor = resources.getColor(R.color.app_color)
         binding.chartWeek.xAxis.spaceMin = SIZE_SPACE
         binding.chartWeek.xAxis.spaceMax = SIZE_SPACE
@@ -236,7 +253,7 @@ class HistoryFragment : BaseFragment() {
         // show most right, most last item
         binding.chartWeek.moveViewToX(xvalue.size.toFloat())
         binding.chartWeek.animateY(DURATION_ANIMATION_Y)
-        binding.chartWeek.postInvalidate()
+        binding.chartWeek.invalidate()
     }
 
     private fun setChartWeekAverageLine() {
