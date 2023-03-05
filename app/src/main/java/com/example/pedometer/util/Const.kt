@@ -51,3 +51,6 @@ const val DISTANCE_PER_STEPS = 0.5
 // steps per 1 minutes(100steps)
 const val MINUTES_PER_STEPS = 100
 const val CALORIES_PER_STEPS = 400.0 / 10000.0
+const val TEXT_REBOOT = "reboot"
+const val TEXT_REBOOT_TIME = "reboottime"
+const val TEXT_REBOOT_BEFORE_STEPS = "rebootbeforesteps"

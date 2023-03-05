@@ -1,7 +1,6 @@
 package com.example.pedometer.util
 
 import android.content.Context
-import android.util.Log
 import com.example.pedometer.R
 import com.example.pedometer.domain.Period
 import com.example.pedometer.domain.WeekGoal
@@ -10,7 +9,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.random.Random
 
 class DataUtil {
 
@@ -191,6 +189,35 @@ class DataUtil {
                 c.add(Calendar.DAY_OF_MONTH, 1)
             }
             return result
+        }
+
+        fun getRebootBeforeSteps(context: Context): Int {
+            val pref = context.getSharedPreferences(TEXT_REBOOT, Context.MODE_PRIVATE)
+            return pref.getInt(TEXT_REBOOT_BEFORE_STEPS, 0)
+        }
+
+        fun getRebootAfterSteps(
+            json: String,
+            rebootHour: String,
+            currentHour: String,
+            context: Context
+        ): Int {
+            val steps = DBUtil.fromStepsJson(json)
+            val filter =
+                steps.filter { item -> rebootHour.toInt() <= item.hour.toInt() && item.hour.toInt() <= currentHour.toInt() }
+                    .sortedBy { item -> item.hour.toInt() }
+            val rebootBeforeSteps = getRebootBeforeSteps(context)
+            // reboot after steps = sum(reboot after steps) - reboot before steps
+            var sum = 0
+            for (item in filter) {
+                sum += item.steps
+            }
+            val rebootAfterSteps = sum - rebootBeforeSteps
+            return if (rebootAfterSteps > 0) {
+                rebootAfterSteps
+            } else {
+                0
+            }
         }
     }
 }

@@ -48,6 +48,31 @@ class DBUtil {
             return Gson().toJson(result)
         }
 
+        fun replaceSteps(json: String, currentHour: String, currentSteps: Int): String {
+            val result = arrayListOf<StepsItem>()
+            val steps = fromStepsJson(json)
+            val filter = steps.filter { step -> step.hour == currentHour }
+            // 오늘 해당 시가 있을 경우
+            if (filter.isNotEmpty()) {
+                for (step in steps) {
+                    // 해당 시에 step 추가하는 방식
+                    if (step.hour == currentHour) {
+                        val new = StepsItem(step.hour, currentSteps)
+                        result.add(new)
+                    } else {
+                        result.add(step)
+                    }
+                }
+            }
+            // 오늘 해당 시가 없을 경우
+            else {
+                result.addAll(steps)
+                val current = StepsItem(currentHour, currentSteps)
+                result.add(current)
+            }
+            return Gson().toJson(result)
+        }
+
         fun fromStepsJson(string: String): List<StepsItem> {
             val type = object : TypeToken<List<StepsItem>>() {}.type
             return try {

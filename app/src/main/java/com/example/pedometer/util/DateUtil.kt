@@ -1,5 +1,6 @@
 package com.example.pedometer.util
 
+import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -69,5 +70,33 @@ class DateUtil {
             val sdf = SimpleDateFormat("yyyyMMdd")
             return sdf.format(cal.time)
         }
+
+        fun isRebootToday(context: Context): Boolean {
+            val pref = context.getSharedPreferences(TEXT_REBOOT, Context.MODE_PRIVATE)
+            val rebootTime = pref.getString(TEXT_REBOOT_TIME, null)
+            return if (rebootTime == null) false
+            else {
+                val c = convertStringToCalendar(rebootTime, "yyyy/MM/dd HH:mm:ss")
+                val sdf = SimpleDateFormat("yyyy/MM/dd")
+                val format = sdf.format(c.time)
+                format == getToday()
+            }
+        }
+
+        fun getRebootHour(context: Context) : String {
+            val pref = context.getSharedPreferences(TEXT_REBOOT, Context.MODE_PRIVATE)
+            val rebootTime = pref.getString(TEXT_REBOOT_TIME, null)
+            val c = convertStringToCalendar(rebootTime!!, "yyyy/MM/dd HH:mm:ss")
+            val sdf = SimpleDateFormat("HH")
+            return sdf.format(c.time)
+        }
+
+        fun convertStringToCalendar(rebootTime: String, format: String): Calendar {
+            val sdf = SimpleDateFormat(format)
+            val c = Calendar.getInstance()
+            c.time = sdf.parse(rebootTime)
+            return c
+        }
+
     }
 }
