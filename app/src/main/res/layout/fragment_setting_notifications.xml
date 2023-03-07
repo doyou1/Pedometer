@@ -59,9 +59,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
                     android:text="@string/text_set_notifications"
                     android:textColor="@color/black"
-                    android:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -84,9 +84,9 @@
                     android:id="@+id/tv_notifications_on_off"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
                     android:text="@string/text_notifications_on_off"
                     android:textColor="@color/black"
-                    android:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/swi_notifications_on_off"
                     app:layout_constraintStart_toStartOf="parent"
@@ -120,9 +120,9 @@
                     android:id="@+id/tv_notifications_period"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
                     android:text="@string/text_notifications_repeat_period"
                     android:textColor="@color/black"
-                    android:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/et_notifications_period"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,9 +145,9 @@
                     android:id="@+id/tv_label_notifications_period"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
                     android:text="@string/text_label_notifications_period"
                     android:textColor="@color/black"
-                    android:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_notifications_period"
                     app:layout_constraintStart_toEndOf="@+id/et_notifications_period"
@@ -161,14 +161,12 @@
                     android:layout_marginHorizontal="5dp"
                     android:text="Set"
                     android:textColor="@color/black"
-                    android:autoSizeTextType="uniform"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_label_notifications_period"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="0.2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

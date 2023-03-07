@@ -33,5 +33,9 @@
     <string name="text_success_change_noti_repeat_period">text_success_change_noti_repeat_period</string>
     <string name="text_fail_change_noti_repeat_period">text_fail_change_noti_repeat_period</string>
     <string name="text_success_change_noti_onoff">text_success_change_noti_onoff</string>
+    <string name="text_home">HOME</string>
+    <string name="text_history">HISTORY</string>
+    <string name="text_community">COMMUNITY</string>
+    <string name="text_setting">SETTING</string>
 
 </resources>

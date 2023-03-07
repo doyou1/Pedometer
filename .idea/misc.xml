@@ -22,6 +22,7 @@
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/drawable/directions_run-48px.xml" value="0.1225" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/drawable/ic_baseline_headset_24.xml" value="0.1225" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/activity_setting.xml" value="0.11354166666666667" />
+        <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_community.xml" value="0.11360083376758728" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_history.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_home.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_setting.xml" value="0.11354166666666667" />
@@ -30,6 +31,7 @@
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_setting_home.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_setting_language.xml" value="0.11354166666666667" />
         <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/layout/fragment_setting_privacy_security.xml" value="0.11354166666666667" />
+        <entry key="..\:/Users/jh/pedometer/Pedometer/app/src/main/res/menu/bottom_nav_menu.xml" value="0.11354166666666667" />
       </map>
     </option>
   </component>

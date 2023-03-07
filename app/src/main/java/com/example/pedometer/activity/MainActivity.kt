@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.Manifest
 import com.example.pedometer.R
 import com.example.pedometer.databinding.ActivityMainBinding
+import com.example.pedometer.fragment.CommunityFragment
 import com.example.pedometer.fragment.HistoryFragment
 import com.example.pedometer.fragment.HomeFragment
 import com.example.pedometer.fragment.SettingFragment
@@ -66,6 +67,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.history -> {
                     setFragment(HistoryFragment.getInstance())
+                }
+                R.id.community -> {
+                    setFragment(CommunityFragment.getInstance())
                 }
                 R.id.setting -> {
                     setFragment(SettingFragment.getInstance())
