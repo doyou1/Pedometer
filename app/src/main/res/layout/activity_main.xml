@@ -12,12 +12,11 @@
             android:id="@+id/layout_action_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/app_color"
             app:layout_constraintBottom_toTopOf="@+id/frame_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/app_color"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_setting"
@@ -25,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
+                android:autoSizeTextType="uniform"
                 app:icon="@drawable/ic_baseline_settings_24"
                 app:iconGravity="textEnd"
                 app:iconTint="@color/white"
