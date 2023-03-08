@@ -6,6 +6,7 @@
     <string name="text_confirm">Confirm</string>
     <string name="text_update_goal">Update Goal Steps</string>
     <string name="text_notifications">Notifications</string>
+    <string name="text_friends">Friends</string>
     <string name="text_privacy_security">Privacy &amp; Security</string>
     <string name="text_help_support">Help And Support</string>
     <string name="text_about">About</string>
@@ -37,5 +38,6 @@
     <string name="text_history">HISTORY</string>
     <string name="text_community">COMMUNITY</string>
     <string name="text_setting">SETTING</string>
+    <string name="text_community_title_sub">\'s Community</string>
 
 </resources>
