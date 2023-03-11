@@ -42,11 +42,9 @@ class CommunityFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setFragment(0)
-
-
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 setFragment(tab?.position)
@@ -80,10 +78,9 @@ class CommunityFragment : BaseFragment() {
                 transaction.addToBackStack(null)
                 transaction.commit()
                 binding.showFrameLayout = true
-            }, 300)
+            }, DELAY_SHOW_FRAME_LAYOUT)
         }
     }
-
 
     companion object {
         private var instance: CommunityFragment? = null

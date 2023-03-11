@@ -39,8 +39,8 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
             val currentDaily = DBHelper.getCurrentDaily(requireContext())
             lifecycleScope.launch(Dispatchers.Main) {

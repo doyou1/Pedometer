@@ -55,3 +55,5 @@ const val CALORIES_PER_STEPS = 400.0 / 10000.0
 const val TEXT_REBOOT = "reboot"
 const val TEXT_REBOOT_TIME = "reboottime"
 const val TEXT_REBOOT_BEFORE_STEPS = "rebootbeforesteps"
+
+const val DELAY_SHOW_FRAME_LAYOUT = 300L
