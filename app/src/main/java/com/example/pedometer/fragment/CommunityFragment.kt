@@ -2,6 +2,8 @@ package com.example.pedometer.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +45,8 @@ class CommunityFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         setFragment(0)
+
+
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 setFragment(tab?.position)
@@ -63,15 +67,20 @@ class CommunityFragment : BaseFragment() {
 
     private fun setFragment(position: Int?) {
         position?.let {
-            val transaction = childFragmentManager.beginTransaction()
-            val fragment = when (it) {
-                0 -> CommunityFriendsFragment.getInstance()
-                1 -> CommunityNotificationsFragment.getInstance()
-                else -> throw NotImplementedError()
-            }
-            transaction.replace(binding.frameLayout.id, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            binding.showFrameLayout = false
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                val transaction = childFragmentManager.beginTransaction()
+                val fragment = when (it) {
+                    0 -> CommunityFriendsFragment.getInstance()
+                    1 -> CommunityNotificationsFragment.getInstance()
+                    else -> throw NotImplementedError()
+                }
+                transaction.replace(binding.frameLayout.id, fragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+                binding.showFrameLayout = true
+            }, 300)
         }
     }
 
