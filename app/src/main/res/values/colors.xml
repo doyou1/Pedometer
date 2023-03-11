@@ -14,4 +14,5 @@
     <color name="not_yet">#e0e3f3</color>
     <color name="app_orange">#e2764b</color>
     <color name="app_red">#e34e5b</color>
+    <color name="app_blue">#0000FF</color>
 </resources>

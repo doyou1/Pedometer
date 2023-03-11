@@ -19,6 +19,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.model.GradientColor
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,19 +42,23 @@ class CommunityFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
         setFragment(0)
-
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 setFragment(tab?.position)
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
+
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 setFragment(tab?.position)
             }
         })
+        val notificationsBadge = binding.tabLayout.getTabAt(1)?.orCreateBadge
+        notificationsBadge?.badgeGravity = BadgeDrawable.TOP_END
+        notificationsBadge?.number = 10
+        notificationsBadge?.backgroundColor = resources.getColor(R.color.app_red)
     }
 
     private fun setFragment(position: Int?) {
