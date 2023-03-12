@@ -35,10 +35,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             startService(Intent(this, PedometerService::class.java))
         }
+
+        init()
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun init() {
         if (checkActivityPermission(this)) {
             setFragment(HomeFragment.getInstance())
         }
@@ -48,9 +49,9 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(resources.getString(R.string.text_update_goal))
             popup.setOnMenuItemClickListener {
                 Log.e(TAG, "it.title: ${it.title}")
-                when(it.title) {
+                when (it.title) {
                     resources.getString(R.string.text_update_goal) -> {
-                        val intent = Intent(this, SettingActivity::class.java)
+                        val intent = Intent(this, UpdateGoalActivity::class.java)
                         intent.putExtra("flag", resources.getString(R.string.text_update_goal))
                         startActivity(intent)
                     }
@@ -77,6 +78,10 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun setFragment(fragment: Fragment) {

@@ -5,20 +5,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pedometer.R
-import com.example.pedometer.databinding.ActivitySettingBinding
+import com.example.pedometer.databinding.ActivityUpdateGoalBinding
 import com.example.pedometer.util.DEFAULT_GOAL
 import java.lang.Exception
 
-class SettingActivity : AppCompatActivity() {
+class UpdateGoalActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySettingBinding
+    private lateinit var binding: ActivityUpdateGoalBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySettingBinding.inflate(layoutInflater)
+        binding = ActivityUpdateGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.etGoal.setText(
-            getSharedPreferences(resources.getString(R.string.text_goal), Context.MODE_PRIVATE).getInt(
+            getSharedPreferences(
+                resources.getString(R.string.text_goal),
+                Context.MODE_PRIVATE
+            ).getInt(
                 resources.getString(R.string.text_goal),
                 DEFAULT_GOAL
             ).toString()
@@ -33,12 +36,26 @@ class SettingActivity : AppCompatActivity() {
     private fun setClickEvent() {
         binding.btnConfirm.setOnClickListener {
             if (isValidate()) {
-                getSharedPreferences(resources.getString(R.string.text_goal), Context.MODE_PRIVATE).edit()
-                    .putInt(resources.getString(R.string.text_goal), binding.etGoal.text.toString().toInt()).apply()
+                getSharedPreferences(
+                    resources.getString(R.string.text_goal),
+                    Context.MODE_PRIVATE
+                ).edit()
+                    .putInt(
+                        resources.getString(R.string.text_goal),
+                        binding.etGoal.text.toString().toInt()
+                    ).apply()
                 finish()
             } else {
-                Toast.makeText(this, resources.getString(R.string.text_edit_text_fail_validate), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.text_edit_text_fail_validate),
+                    Toast.LENGTH_LONG
+                ).show()
             }
+        }
+
+        binding.btnBack.setOnClickListener {
+            finish()
         }
     }
 

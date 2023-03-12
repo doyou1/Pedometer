@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name="com.example.pedometer.activity.SettingActivity"
+            android:name="com.example.pedometer.activity.UpdateGoalActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -64,6 +64,14 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".activity.AddFriendsDialogActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"
+
+            />
     </application>
 
 </manifest>

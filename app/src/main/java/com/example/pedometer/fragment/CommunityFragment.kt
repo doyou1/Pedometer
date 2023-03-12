@@ -1,14 +1,19 @@
 package com.example.pedometer.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
+import com.example.pedometer.activity.AddFriendsDialogActivity
 import com.example.pedometer.databinding.FragmentCommunityBinding
 import com.example.pedometer.databinding.FragmentHistoryBinding
 import com.example.pedometer.fragment.community.CommunityFriendsFragment
@@ -32,6 +37,8 @@ class CommunityFragment : BaseFragment() {
     private val binding get() = _binding!!
     private val TAG = this::class.java.simpleName
     override val currentView: Int = FLAG_COMMUNITY
+
+    private val addFriendsDialogActivityLauncher = getAddFriendsDialogActivityResultLauncher()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,10 +64,9 @@ class CommunityFragment : BaseFragment() {
                 setFragment(tab?.position)
             }
         })
-        val notificationsBadge = binding.tabLayout.getTabAt(1)?.orCreateBadge
-        notificationsBadge?.badgeGravity = BadgeDrawable.TOP_END
-        notificationsBadge?.number = 10
-        notificationsBadge?.backgroundColor = resources.getColor(R.color.app_red)
+
+        setNotificationsBadge()
+        setClickEvent()
     }
 
     private fun setFragment(position: Int?) {
@@ -79,6 +85,44 @@ class CommunityFragment : BaseFragment() {
                 transaction.commit()
                 binding.showFrameLayout = true
             }, DELAY_SHOW_FRAME_LAYOUT)
+        }
+    }
+
+    private fun setNotificationsBadge() {
+        val notificationsBadge = binding.tabLayout.getTabAt(1)?.orCreateBadge
+        notificationsBadge?.badgeGravity = BadgeDrawable.TOP_END
+        notificationsBadge?.number = 10
+        notificationsBadge?.backgroundColor = resources.getColor(R.color.app_red)
+    }
+
+    private fun setClickEvent() {
+        binding.btnAddFriends.setOnClickListener {
+            addFriendsDialogActivityLauncher.launch(
+                Intent(
+                    context,
+                    AddFriendsDialogActivity::class.java
+                )
+            )
+        }
+    }
+
+    private fun getAddFriendsDialogActivityResultLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(
+            ActivityResultContracts
+                .StartActivityForResult()
+        ) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+//                val data: Intent? = result.data
+//                data.let { data ->
+//                    binding.tvResult.visibility = View.VISIBLE
+//                    binding.ivResult.visibility = View.GONE
+//                    binding.progressCircular.visibility = View.GONE
+//                    binding.tvResult.text =
+//                        data?.getStringExtra("text") ?: "Empty"
+//                }
+            }
         }
     }
 
