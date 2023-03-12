@@ -57,4 +57,5 @@ const val TEXT_REBOOT_TIME = "reboottime"
 const val TEXT_REBOOT_BEFORE_STEPS = "rebootbeforesteps"
 
 const val DELAY_SHOW_FRAME_LAYOUT = 300L
+const val DURATION_APP_MSG = 2000
 const val FLAG_CLOSE = -1

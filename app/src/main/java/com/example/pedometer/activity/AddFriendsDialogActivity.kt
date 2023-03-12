@@ -1,15 +1,17 @@
 package com.example.pedometer.activity
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.RectF
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pedometer.databinding.ActivityAddFriendsDialogBinding
 import com.example.pedometer.util.FLAG_CLOSE
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 
 class AddFriendsDialogActivity : AppCompatActivity() {
@@ -29,9 +31,22 @@ class AddFriendsDialogActivity : AppCompatActivity() {
     }
 
     private fun setClickEvent() {
-
+        binding.layoutContent.setOnClickListener {
+            if (it !is TextInputEditText && it !is TextInputLayout) {
+                hideKeyboard()
+            }
+        }
     }
 
+    private fun hideKeyboard() {
+        val im =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        im.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        currentFocus?.clearFocus()
+    }
+
+
+    // when touch transparent area, call finish() function like dialog
     override fun onTouchEvent(event: MotionEvent): Boolean {
         // Get the action of the touch event
         val action = event.action

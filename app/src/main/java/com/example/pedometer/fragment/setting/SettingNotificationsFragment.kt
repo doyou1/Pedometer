@@ -64,16 +64,16 @@ class SettingNotificationsFragment : SettingChildBaseFragment() {
                 val pref =
                     requireContext().getSharedPreferences(TEXT_NOTI_REPEAT, Context.MODE_PRIVATE)
                 pref.edit().putInt(TEXT_VALUE, value * (60 * 1000)).apply()
-                AlertUtil.showAlert(
+                AppMsgUtil.showInfoMsg(
                     requireContext().resources.getString(R.string.text_success_change_noti_repeat_period),
                     STATUS_SUCCESS,
-                    requireContext()
+                    requireActivity()
                 )
             } else {
-                AlertUtil.showAlert(
+                AppMsgUtil.showErrorMsg(
                     requireContext().resources.getString(R.string.text_fail_change_noti_repeat_period),
                     STATUS_FAIL,
-                    requireContext()
+                    requireActivity()
                 )
             }
             Handler(Looper.getMainLooper()).postDelayed({
@@ -86,10 +86,10 @@ class SettingNotificationsFragment : SettingChildBaseFragment() {
 
             val pref = requireContext().getSharedPreferences(TEXT_NOTI_REPEAT, Context.MODE_PRIVATE)
             pref.edit().putBoolean(TEXT_ONOFF, isChecked).apply()
-            AlertUtil.showAlert(
+            AppMsgUtil.showInfoMsg(
                 requireContext().resources.getString(R.string.text_success_change_noti_onoff),
                 STATUS_SUCCESS,
-                requireContext()
+                requireActivity()
             )
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.swiNotificationsOnOff.isEnabled = true

@@ -1,35 +1,33 @@
 package com.example.pedometer.fragment
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.lifecycleScope
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
+import com.devspark.appmsg.AppMsg
 import com.example.pedometer.R
 import com.example.pedometer.activity.AddFriendsDialogActivity
 import com.example.pedometer.databinding.FragmentCommunityBinding
-import com.example.pedometer.databinding.FragmentHistoryBinding
 import com.example.pedometer.fragment.community.CommunityFriendsFragment
 import com.example.pedometer.fragment.community.CommunityNotificationsFragment
-import com.example.pedometer.room.DBHelper
-import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
-import com.github.mikephil.charting.components.LimitLine
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.model.GradientColor
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class CommunityFragment : BaseFragment() {
 
@@ -66,6 +64,7 @@ class CommunityFragment : BaseFragment() {
         })
 
         setNotificationsBadge()
+        setCommunityId()
         setClickEvent()
     }
 
@@ -88,6 +87,12 @@ class CommunityFragment : BaseFragment() {
         }
     }
 
+    private fun setCommunityId() {
+        val content = SpannableString("#123456")
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        binding.tvCommunityId.text = content
+    }
+
     private fun setNotificationsBadge() {
         val notificationsBadge = binding.tabLayout.getTabAt(1)?.orCreateBadge
         notificationsBadge?.badgeGravity = BadgeDrawable.TOP_END
@@ -104,6 +109,25 @@ class CommunityFragment : BaseFragment() {
                 )
             )
         }
+
+        binding.tvCommunityId.setOnClickListener {
+            copyCommunityId()
+        }
+        binding.btnCopyCommunityId.setOnClickListener {
+            copyCommunityId()
+        }
+    }
+
+    private fun copyCommunityId() {
+        val clipboardManager: ClipboardManager =
+            context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText(
+            resources.getString(R.string.text),
+            binding.tvCommunityId.text.toString()
+        )
+        clipboardManager.setPrimaryClip(clipData)
+        val text = "Copied Community ID! (${binding.tvCommunityId.text})"
+        AppMsgUtil.showInfoMsg(text, requireActivity())
     }
 
     private fun getAddFriendsDialogActivityResultLauncher(): ActivityResultLauncher<Intent> {
