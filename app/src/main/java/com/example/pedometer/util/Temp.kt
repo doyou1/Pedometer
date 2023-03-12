@@ -1,5 +1,9 @@
+import com.example.pedometer.domain.AddFriends
 import com.example.pedometer.domain.CommunityFriends
 import com.example.pedometer.domain.CommunityNotifications
+import com.example.pedometer.util.FLAG_STATUS_ADD
+import com.example.pedometer.util.FLAG_STATUS_ALREADY
+import com.example.pedometer.util.FLAG_STATUS_PENDING
 
 val TEMP_LIST_COMMUNITY_FRIENDS = listOf(
     CommunityFriends(
@@ -278,4 +282,118 @@ val TEMP_THIS_WEEK_LIST_COMMUNITY_NOTIFICATIONS = listOf(
         "achieve goal!",
         "2023/03/09 21:41"
     ),
+)
+
+val TEMP_LIST_ADD_FRIENDS = listOf(
+    AddFriends(
+        1,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "Sim jh",
+        FLAG_STATUS_ADD,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIuloj%2Fbtq98uDPwBx%2F1ManmKCAylybcg5Q3zno40%2Fimg.jpg",
+        "Aki chu",
+        FLAG_STATUS_ADD,
+        "4000",
+        "#321321"
+    ),
+    AddFriends(
+        3,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "what's your name?",
+        FLAG_STATUS_PENDING,
+        "12000",
+        "#456456"
+    ),
+    AddFriends(
+        1,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "Sim jh",
+        FLAG_STATUS_PENDING,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Aki chu",
+        FLAG_STATUS_ALREADY,
+        "4000",
+        "#321321"
+    ), AddFriends(
+        1,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Sim jh",
+        FLAG_STATUS_ADD,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Aki chu",
+        FLAG_STATUS_ADD,
+        "4000",
+        "#321321"
+    ),
+    AddFriends(
+        1,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "Sim jh",
+        FLAG_STATUS_ADD,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIuloj%2Fbtq98uDPwBx%2F1ManmKCAylybcg5Q3zno40%2Fimg.jpg",
+        "Aki chu",
+        FLAG_STATUS_ADD,
+        "4000",
+        "#321321"
+    ),
+    AddFriends(
+        3,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "what's your name?",
+        FLAG_STATUS_PENDING,
+        "12000",
+        "#456456"
+    ),
+    AddFriends(
+        1,
+        "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FkL6aZ%2Fbtq93nFYWq1%2Ff6vKYZNPs0ZdKpQIZIDMsK%2Fimg.jpg",
+        "Sim jh",
+        FLAG_STATUS_PENDING,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Aki chu",
+        FLAG_STATUS_ALREADY,
+        "4000",
+        "#321321"
+    ),
+    AddFriends(
+        1,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Sim jh",
+        FLAG_STATUS_ADD,
+        "3000",
+        "#123123"
+    ),
+    AddFriends(
+        2,
+        "https://ibighit.com/bts/images/profile/proof/member/member-jimin.jpg",
+        "Aki chu",
+        FLAG_STATUS_ADD,
+        "4000",
+        "#321321"
+    )
 )

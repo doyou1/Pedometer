@@ -43,5 +43,8 @@
     <string name="text_this_week">This Week</string>
     <string name="text_add_friends">Add Friends</string>
     <string name="text_hint_search_friends">Search Community Id...</string>
-
+    <string name="text_todays">Today\'s</string>
+    <string name="text_add">Add</string>
+    <string name="text_pending">Pending...</string>
+    <string name="text_already">Already</string>
 </resources>

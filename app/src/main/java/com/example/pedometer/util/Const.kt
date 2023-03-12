@@ -57,5 +57,9 @@ const val TEXT_REBOOT_TIME = "reboottime"
 const val TEXT_REBOOT_BEFORE_STEPS = "rebootbeforesteps"
 
 const val DELAY_SHOW_FRAME_LAYOUT = 300L
+const val DELAY_SHOW_RECYCLER_VIEW = 300L
 const val DURATION_APP_MSG = 2000
 const val FLAG_CLOSE = -1
+const val FLAG_STATUS_ADD = 0
+const val FLAG_STATUS_PENDING = 1
+const val FLAG_STATUS_ALREADY = 2

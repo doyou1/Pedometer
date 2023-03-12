@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="showRecyclerView"
+            type="Boolean" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_wrap"
         android:layout_width="match_parent"
@@ -31,17 +40,32 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:autoSizeTextType="uniform"
                     android:text="@string/text_add_friends"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_close"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/text_add_friends" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_close"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    app:icon="@drawable/ic_baseline_close_24"
+                    app:iconGravity="textEnd"
+                    app:iconTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -69,26 +93,24 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_et_search_friends"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="25dp"
+                    android:layout_marginVertical="10dp"
                     android:hint="@string/text_hint_search_friends"
                     app:layout_constraintBottom_toTopOf="@+id/recycler_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    >
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_search_friends"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:drawableStart="@drawable/ic_baseline_search_24"
-                        android:gravity="center|start"
                         android:drawablePadding="5dp"
-                        />
+                        android:gravity="center|start" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,6 +119,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginVertical="10dp"
+                    android:visibility="@{showRecyclerView ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_et_search_friends" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progress="0"
+                    android:visibility="@{showRecyclerView ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

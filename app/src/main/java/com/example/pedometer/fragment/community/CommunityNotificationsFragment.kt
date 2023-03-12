@@ -33,17 +33,23 @@ class CommunityNotificationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView() {
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
             LinearLayoutManager(requireContext()).orientation
         )
         binding.recyclerViewToday.addItemDecoration(dividerItemDecoration)
         binding.recyclerViewToday.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewToday.adapter = CommunityNotificationsAdapter(TEMP_TODAY_LIST_COMMUNITY_NOTIFICATIONS)
+        binding.recyclerViewToday.adapter =
+            CommunityNotificationsAdapter(TEMP_TODAY_LIST_COMMUNITY_NOTIFICATIONS)
 
         binding.recyclerViewThisWeek.addItemDecoration(dividerItemDecoration)
         binding.recyclerViewThisWeek.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewThisWeek.adapter = CommunityNotificationsAdapter(TEMP_THIS_WEEK_LIST_COMMUNITY_NOTIFICATIONS)
+        binding.recyclerViewThisWeek.adapter =
+            CommunityNotificationsAdapter(TEMP_THIS_WEEK_LIST_COMMUNITY_NOTIFICATIONS)
     }
 
     companion object {

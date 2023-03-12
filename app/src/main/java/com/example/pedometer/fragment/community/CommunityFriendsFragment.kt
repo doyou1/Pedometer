@@ -31,6 +31,10 @@ class CommunityFriendsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView() {
         val dividerItemDecoration = DividerItemDecoration(
             requireContext(),
             LinearLayoutManager(requireContext()).orientation
