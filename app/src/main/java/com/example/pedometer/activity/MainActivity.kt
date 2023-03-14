@@ -11,6 +11,7 @@ import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import android.Manifest
+import com.example.pedometer.BaseApplication
 import com.example.pedometer.R
 import com.example.pedometer.databinding.ActivityMainBinding
 import com.example.pedometer.fragment.CommunityFragment
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         if (checkActivityPermission(this)) {
+            (application as BaseApplication).processCommunityId()
             setFragment(HomeFragment.getInstance())
         }
 
@@ -116,6 +118,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_STEP_COUNT) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                (application as BaseApplication).processCommunityId()
                 setFragment(HomeFragment.getInstance())
             }
         }

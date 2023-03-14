@@ -3,7 +3,7 @@ package com.example.pedometer.room
 import android.content.Context
 import androidx.room.Room
 import com.example.pedometer.room.dto.Steps
-import com.example.pedometer.util.DBUtil
+import com.example.pedometer.util.RoomDBUtil
 import com.example.pedometer.util.DataUtil
 import com.example.pedometer.util.DateUtil
 import com.example.pedometer.util.TEXT_PEDOMETER
@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DBHelper {
+class RoomDBHelper {
     companion object {
         private val TAG = this::class.java.simpleName
 
@@ -53,7 +53,7 @@ class DBHelper {
                             // temp process for minus steps error
                             if(currentSteps < 0) return@launch
                             val newSteps =
-                                DBUtil.replaceSteps(item.steps, currentHour, currentSteps)
+                                RoomDBUtil.replaceSteps(item.steps, currentHour, currentSteps)
                             item.steps = newSteps
                             db.update(item)
                         }
@@ -70,17 +70,17 @@ class DBHelper {
                             // temp process for minus steps error
                             if(currentSteps < 0) return@launch
                             val newSteps =
-                                DBUtil.addSteps(item.steps, currentHour, currentSteps)
+                                RoomDBUtil.addSteps(item.steps, currentHour, currentSteps)
                             item.steps = newSteps
                             db.update(item)
                         }
                     } else {
-                        val prevStepSum = DBUtil.getPrevStepSum(item.steps)
+                        val prevStepSum = RoomDBUtil.getPrevStepSum(item.steps)
                         val currentSteps = steps - (item.initSteps + prevStepSum)
                         // temp process for minus steps error
                         if(currentSteps < 0) return@launch
                         val newSteps =
-                            DBUtil.addSteps(item.steps, DateUtil.getCurrentHour(), currentSteps)
+                            RoomDBUtil.addSteps(item.steps, DateUtil.getCurrentHour(), currentSteps)
                         item.steps = newSteps
                         db.update(item)
                     }

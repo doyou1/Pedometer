@@ -63,3 +63,4 @@ const val FLAG_CLOSE = -1
 const val FLAG_STATUS_ADD = 0
 const val FLAG_STATUS_PENDING = 1
 const val FLAG_STATUS_ALREADY = 2
+const val TEXT_COMMUNITY_ID = "communityid"

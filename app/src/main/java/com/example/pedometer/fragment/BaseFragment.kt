@@ -5,10 +5,9 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.FLAG_HISTORY
 import com.example.pedometer.util.FLAG_HOME
@@ -39,7 +38,7 @@ open class BaseFragment : Fragment(), SensorEventListener {
         event?.let { e ->
             if (e.values[0] > Integer.MAX_VALUE || e.values[0].toInt() == 0) return
             activity?.let { context ->
-                DBHelper.process(context, e.values[0].toInt())
+                RoomDBHelper.process(context, e.values[0].toInt())
                 updateSteps(context)
             }
         }
@@ -47,8 +46,8 @@ open class BaseFragment : Fragment(), SensorEventListener {
 
     private fun updateSteps(context: Context) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val current = DBHelper.getCurrent(context)
-            val currentDaily = DBHelper.getCurrentDaily(context)
+            val current = RoomDBHelper.getCurrent(context)
+            val currentDaily = RoomDBHelper.getCurrentDaily(context)
             lifecycleScope.launch(Dispatchers.Main) {
                 when(currentView) {
                     FLAG_HOME -> {

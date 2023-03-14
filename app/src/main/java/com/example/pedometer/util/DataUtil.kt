@@ -1,6 +1,7 @@
 package com.example.pedometer.util
 
 import android.content.Context
+import android.provider.Settings
 import com.example.pedometer.R
 import com.example.pedometer.domain.Period
 import com.example.pedometer.domain.WeekGoal
@@ -86,7 +87,7 @@ class DataUtil {
                     xvalue == sdf.format(c.time)
                 }
                 if (filter.isNotEmpty()) {
-                    barEntries.add(BarEntry(i.toFloat(), DBUtil.computeSteps(filter[0]).toFloat()))
+                    barEntries.add(BarEntry(i.toFloat(), RoomDBUtil.computeSteps(filter[0]).toFloat()))
                 } else {
                     barEntries.add(BarEntry(i.toFloat(), 0f))
                 }
@@ -110,7 +111,7 @@ class DataUtil {
                     barEntries.add(
                         BarEntry(
                             i.toFloat(),
-                            (DBUtil.computeSumSteps(filter)).toFloat()
+                            (RoomDBUtil.computeSumSteps(filter)).toFloat()
                         )
                     )
                 }
@@ -120,7 +121,7 @@ class DataUtil {
                     barEntries.add(
                         BarEntry(
                             i.toFloat(),
-                            (DBUtil.computeSumSteps(filter)).toFloat()
+                            (RoomDBUtil.computeSumSteps(filter)).toFloat()
                         )
                     )
                 }
@@ -175,7 +176,7 @@ class DataUtil {
                 val time = c.timeInMillis
                 val f = filter.filter { item -> item.timestamp == time }
                 if (f.isNotEmpty()) {
-                    val steps = DBUtil.computeSteps(f[0])
+                    val steps = RoomDBUtil.computeSteps(f[0])
                     if (steps >= goal) {
                         result[i].status = STATUS_REACHED    // over than goal
                     } else if (steps > 0) {
@@ -202,7 +203,7 @@ class DataUtil {
             currentHour: String,
             context: Context
         ): Int {
-            val steps = DBUtil.fromStepsJson(json)
+            val steps = RoomDBUtil.fromStepsJson(json)
             val filter =
                 steps.filter { item -> rebootHour.toInt() <= item.hour.toInt() && item.hour.toInt() <= currentHour.toInt() }
                     .sortedBy { item -> item.hour.toInt() }
@@ -218,6 +219,11 @@ class DataUtil {
             } else {
                 0
             }
+        }
+
+        fun getDeviceUUID(context: Context) : UUID {
+            val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            return UUID(androidId.hashCode().toLong(), 0)
         }
     }
 }

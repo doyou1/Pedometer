@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
 import com.example.pedometer.adapter.WeekGoalAdapter
 import com.example.pedometer.databinding.FragmentHomeBinding
-import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
 import com.github.mikephil.charting.data.PieData
@@ -22,7 +22,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -42,7 +41,7 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-            val currentDaily = DBHelper.getCurrentDaily(requireContext())
+            val currentDaily = RoomDBHelper.getCurrentDaily(requireContext())
             lifecycleScope.launch(Dispatchers.Main) {
                 setWeekGoal(currentDaily)
             }
@@ -76,8 +75,8 @@ class HomeFragment : BaseFragment() {
         binding.chartStep.isRotationEnabled = false
 
         if (item != null) {
-            binding.chartStep.centerText = "${getCenterText(DBUtil.computeSteps(item))}"
-            binding.chartStep.data = getData(DBUtil.computeSteps(item))
+            binding.chartStep.centerText = "${getCenterText(RoomDBUtil.computeSteps(item))}"
+            binding.chartStep.data = getData(RoomDBUtil.computeSteps(item))
         }
         binding.chartStep.animateY(DURATION_ANIMATION_Y)
         binding.chartStep.invalidate()
@@ -85,7 +84,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setText(item: Pedometer?) {
         if (item != null) {
-            val steps = DBUtil.computeSteps(item)
+            val steps = RoomDBUtil.computeSteps(item)
 
             // distance per 1steps
             binding.tvDistanceData.text = "${(steps * DISTANCE_PER_STEPS) / 1000.0}"

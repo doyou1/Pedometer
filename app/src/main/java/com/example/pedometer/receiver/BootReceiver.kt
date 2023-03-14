@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.room.dto.Steps
 import com.example.pedometer.service.PedometerService
@@ -31,7 +31,7 @@ class BootReceiver : BroadcastReceiver() {
      */
     private fun processReboot(context: Context) {
         GlobalScope.launch(Dispatchers.IO) {
-            val current = DBHelper.getCurrent(context)
+            val current = RoomDBHelper.getCurrent(context)
             // no data on reboot day
             if (current == null) {
                 // insert initSteps: 0
@@ -42,18 +42,18 @@ class BootReceiver : BroadcastReceiver() {
                     0,
                     Gson().toJson(Steps(listOf()))
                 )
-                DBHelper.insert(pedometer, context)
+                RoomDBHelper.insert(pedometer, context)
             } else {
                 // 1. set current item's initSteps = 0
                 current.initSteps = 0
-                DBHelper.update(current, context)
+                RoomDBHelper.update(current, context)
                 GlobalScope.launch(Dispatchers.Main) {
                     val pref = context.getSharedPreferences(TEXT_REBOOT, Context.MODE_PRIVATE)
                     pref.edit()
                     // 2.1 save Reboot time
                     .putString(TEXT_REBOOT_TIME, "${DateUtil.getFullToday()} ${DateUtil.getTime()}")
                     // 2.2 save Reboot hour's before steps
-                    .putInt(TEXT_REBOOT_BEFORE_STEPS, DBUtil.computeSteps(current))
+                    .putInt(TEXT_REBOOT_BEFORE_STEPS, RoomDBUtil.computeSteps(current))
                     .apply()
                 }
             }

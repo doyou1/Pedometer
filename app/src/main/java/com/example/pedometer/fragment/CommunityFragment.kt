@@ -88,9 +88,12 @@ class CommunityFragment : BaseFragment() {
     }
 
     private fun setCommunityId() {
-        val content = SpannableString("#123456")
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        binding.tvCommunityId.text = content
+        val pref = requireContext().getSharedPreferences(TEXT_COMMUNITY_ID, Context.MODE_PRIVATE)
+        pref.getString(TEXT_COMMUNITY_ID, null)?.let {
+            val content = SpannableString(it)
+            content.setSpan(UnderlineSpan(), 0, content.length, 0)
+            binding.tvCommunityId.text = content
+        }
     }
 
     private fun setNotificationsBadge() {

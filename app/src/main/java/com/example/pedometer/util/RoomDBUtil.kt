@@ -6,7 +6,7 @@ import com.example.pedometer.room.dto.StepsItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class DBUtil {
+class RoomDBUtil {
     companion object {
         private val TAG = this::class.java.simpleName
 

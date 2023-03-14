@@ -13,7 +13,7 @@ import android.os.IBinder
 import com.example.pedometer.R
 import com.example.pedometer.activity.MainActivity
 import com.example.pedometer.receiver.ShutdownReceiver
-import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -106,7 +106,7 @@ class PedometerService : Service(), SensorEventListener {
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let { e ->
             if (e.values[0] > Integer.MAX_VALUE || e.values[0].toInt() == 0) return
-            DBHelper.process(this, e.values[0].toInt())
+            RoomDBHelper.process(this, e.values[0].toInt())
         }
     }
 
@@ -131,9 +131,9 @@ class PedometerService : Service(), SensorEventListener {
             } else {
                 Notification.Builder(context)
             }
-            val item = DBHelper.getCurrent(context)
+            val item = RoomDBHelper.getCurrent(context)
             val contentText = if (item != null) {
-                val steps = DBUtil.fromStepsJson(item.steps)
+                val steps = RoomDBUtil.fromStepsJson(item.steps)
                 var sum = 0
                 for (step in steps) {
                     sum += step.steps

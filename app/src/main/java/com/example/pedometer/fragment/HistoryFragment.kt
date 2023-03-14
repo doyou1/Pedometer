@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
 import com.example.pedometer.databinding.FragmentHistoryBinding
-import com.example.pedometer.room.DBHelper
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
 import com.github.mikephil.charting.components.LimitLine
@@ -38,8 +38,8 @@ class HistoryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-            val currentDaily = DBHelper.getCurrentDaily(requireContext())
-            val currentWeek = DBHelper.getCurrentWeek(requireContext())
+            val currentDaily = RoomDBHelper.getCurrentDaily(requireContext())
+            val currentWeek = RoomDBHelper.getCurrentWeek(requireContext())
             lifecycleScope.launch(Dispatchers.Main) {
                 when (currentView) {
                     FLAG_HISTORY -> {
@@ -107,7 +107,7 @@ class HistoryFragment : BaseFragment() {
         binding.chartDaily.axisLeft.setDrawGridLines(false)
         binding.chartDaily.axisLeft.axisMinimum = 0f
         binding.chartDaily.axisLeft.axisMaximum =
-            if (DBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (DBUtil.computeMaxSteps(item) + (DBUtil.computeMaxSteps(
+            if (RoomDBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (RoomDBUtil.computeMaxSteps(item) + (RoomDBUtil.computeMaxSteps(
                 item
             ) / 10).toFloat()) else (goal + (goal / 10)).toFloat()
         binding.chartDaily.axisRight.isEnabled = false
@@ -221,7 +221,7 @@ class HistoryFragment : BaseFragment() {
         binding.chartWeek.axisLeft.setDrawGridLines(false)
         binding.chartWeek.axisLeft.axisMinimum = 0f
         binding.chartWeek.axisLeft.axisMaximum =
-            if (DBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (DBUtil.computeMaxSteps(item) + (DBUtil.computeMaxSteps(
+            if (RoomDBUtil.computeMaxSteps(item) >= (goal + (goal / 10))) (RoomDBUtil.computeMaxSteps(item) + (RoomDBUtil.computeMaxSteps(
                 item
             ) / 10).toFloat()) else (goal + (goal / 10)).toFloat()
 
