@@ -47,4 +47,11 @@
     <string name="text_add">Add</string>
     <string name="text_pending">Pending...</string>
     <string name="text_already">Already</string>
+    <string name="text_login">Login</string>
+    <string name="text_login_sub">Please sign in to continue.</string>
+    <string name="text_hint_id_new">New ID</string>
+    <string name="text_hint_id_exist">Existing ID</string>
+    <string name="text_hint_password">Password</string>
+    <string name="text_new_id">New ID</string>
+    <string name="text_exist_id">Exist ID</string>
 </resources>
