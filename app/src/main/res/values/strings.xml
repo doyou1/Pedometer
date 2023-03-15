@@ -54,4 +54,5 @@
     <string name="text_hint_password">Password</string>
     <string name="text_new_id">New ID</string>
     <string name="text_exist_id">Exist ID</string>
+    <string name="text_logout">Logout</string>
 </resources>

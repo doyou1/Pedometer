@@ -10,7 +10,7 @@ import java.util.*
 class APIHelper {
     companion object {
         private val TAG = this::class.java.simpleName
-        fun getNewCommunityId(uuid: UUID) : String {
+        fun getNewCommunityId(uuid: UUID): String {
             val length = 8
 
             // UUID to byte array
@@ -38,15 +38,24 @@ class APIHelper {
             // check value duplicate
 //            while(true) {
 //                if(!isDuplicateCommunityId(resultStr.toString())) break
-                // randomShuffle
+            // randomShuffle
 //            hashStr = randomShuffle(hashStr)
-        //   }
+            //   }
 
             return "#$resultStr"
         }
 
-        private fun isDuplicateCommunityId(id: String) : Boolean {
+        private fun isDuplicateCommunityId(id: String): Boolean {
             return false
+        }
+
+
+        fun isAbleLogin(id: String, pwd: String, context: Context): Boolean {
+            // when new id login, reigster user
+            // when exist id login, login user
+//            loginProcess(id, pwd)
+            val result = true
+            return result
         }
     }
 

@@ -64,3 +64,5 @@ const val FLAG_STATUS_ADD = 0
 const val FLAG_STATUS_PENDING = 1
 const val FLAG_STATUS_ALREADY = 2
 const val TEXT_COMMUNITY_ID = "communityid"
+const val MINIMUM_LENGTH_PASSWORD = 4
+const val TEXT_IS_LOGIN = "isLogin"

@@ -20,6 +20,7 @@ import com.example.pedometer.fragment.HomeFragment
 import com.example.pedometer.fragment.SettingFragment
 import com.example.pedometer.service.PedometerService
 import com.example.pedometer.util.REQUEST_CODE_STEP_COUNT
+import com.example.pedometer.util.TEXT_IS_LOGIN
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,13 +43,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
         if (checkActivityPermission(this)) {
-            (application as BaseApplication).processCommunityId()
             setFragment(HomeFragment.getInstance())
         }
 
         binding.btnSetting.setOnClickListener {
             val popup = PopupMenu(this, binding.btnSetting)
             popup.menu.add(resources.getString(R.string.text_update_goal))
+            popup.menu.add(resources.getString(R.string.text_logout))
             popup.setOnMenuItemClickListener {
                 Log.e(TAG, "it.title: ${it.title}")
                 when (it.title) {
@@ -56,6 +57,15 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this, UpdateGoalActivity::class.java)
                         intent.putExtra("flag", resources.getString(R.string.text_update_goal))
                         startActivity(intent)
+                    }
+                    resources.getString(R.string.text_logout) -> {
+                        getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).edit().putBoolean(
+                            TEXT_IS_LOGIN, false
+                        ).apply()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivity(intent)
+                        stopService(Intent(this, PedometerService::class.java))
+                        finish()
                     }
                 }
                 false
