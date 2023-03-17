@@ -2,8 +2,7 @@ package com.example.pedometer
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
-import com.example.pedometer.api.APIHelper
+import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.util.*
 
 class BaseApplication : Application() {

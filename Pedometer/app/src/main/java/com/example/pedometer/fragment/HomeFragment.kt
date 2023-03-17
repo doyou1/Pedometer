@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.pedometer.R
 import com.example.pedometer.adapter.WeekGoalAdapter
 import com.example.pedometer.databinding.FragmentHomeBinding
+import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.util.*
@@ -45,6 +47,11 @@ class HomeFragment : BaseFragment() {
             lifecycleScope.launch(Dispatchers.Main) {
                 setWeekGoal(currentDaily)
             }
+        }
+
+        binding.btnPost.setOnClickListener {
+            Log.e(TAG, "btn post")
+            APIHelper.post()
         }
     }
 
