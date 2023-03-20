@@ -8,6 +8,9 @@ import com.example.pedometer.domain.WeekGoal
 import com.example.pedometer.room.Pedometer
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import java.math.BigInteger
+import java.nio.ByteBuffer
+import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -87,7 +90,12 @@ class DataUtil {
                     xvalue == sdf.format(c.time)
                 }
                 if (filter.isNotEmpty()) {
-                    barEntries.add(BarEntry(i.toFloat(), RoomDBUtil.computeSteps(filter[0]).toFloat()))
+                    barEntries.add(
+                        BarEntry(
+                            i.toFloat(),
+                            RoomDBUtil.computeSteps(filter[0]).toFloat()
+                        )
+                    )
                 } else {
                     barEntries.add(BarEntry(i.toFloat(), 0f))
                 }
@@ -221,9 +229,54 @@ class DataUtil {
             }
         }
 
-        fun getDeviceUUID(context: Context) : UUID {
-            val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        fun getDeviceUUID(context: Context): UUID {
+            val androidId =
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             return UUID(androidId.hashCode().toLong(), 0)
+        }
+
+        fun convertUUIDToString(uuid: UUID, length: Int): String {
+            // UUID to byte array
+            val uuidBytes = ByteBuffer.wrap(ByteArray(16)).apply {
+                putLong(uuid.mostSignificantBits)
+                putLong(uuid.leastSignificantBits)
+            }.array()
+
+            // use hash function for sha-256
+            val md = MessageDigest.getInstance("SHA-256")
+            val hashBytes = md.digest(uuidBytes)
+
+            // hash value to hex value
+            val hashBigInt = BigInteger(1, hashBytes)
+            var hashStr = hashBigInt.toString(16)
+
+            // hex value to string (substring)
+            val resultStr = StringBuilder()
+            val step = hashStr.length / length
+            for (i in 0 until length) {
+                resultStr.append(hashStr[i * step])
+            }
+
+            return resultStr.toString()
+        }
+
+        fun increaseHexString(value: String, initLength: Int): String {
+            var result = value
+            if (result.length == initLength) {
+                result += "0"
+            } else {
+                if (result[result.length - 1] == 'F') {
+                    result += "0"
+                } else if (result[result.length - 1] == '9') {
+                    result = result.substring(0, result.length - 1) + "A"
+                } else {
+                    result = result.substring(
+                        0,
+                        result.length - 1
+                    ) + (result[result.length - 1] + 1).toString()
+                }
+            }
+            return result
         }
     }
 }

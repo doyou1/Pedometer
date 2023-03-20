@@ -49,10 +49,10 @@ class HomeFragment : BaseFragment() {
             }
         }
 
-        binding.btnPost.setOnClickListener {
-            Log.e(TAG, "btn post")
-            APIHelper.post()
-        }
+//        binding.btnPost.setOnClickListener {
+//            Log.e(TAG, "btn post")
+////            APIHelper.post()
+//        }
     }
 
     override fun updateCurrentSteps(item: Pedometer?) {

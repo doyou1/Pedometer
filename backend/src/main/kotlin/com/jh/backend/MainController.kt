@@ -13,6 +13,9 @@ class MainController {
     @Autowired
     private lateinit var personRepository: PersonRepository
 
+    @Autowired
+    private lateinit var userRepository: UserRepository
+
     @RequestMapping("/getUsers", method = [RequestMethod.GET])
     fun home(): String {
         return personRepository.findAll().toString()
@@ -23,4 +26,26 @@ class MainController {
         println("request list: $list")
         return personRepository.findAll()
     }
+
+    @RequestMapping("/isDuplicateId", method = [RequestMethod.POST])
+    fun isDuplicateId(@RequestBody value: String): Boolean {
+        return userRepository.findById(value) != null
+    }
+
+    @RequestMapping("/isAbleLogin", method = [RequestMethod.POST])
+    fun isAbleLogin(@RequestBody item: LoginUser): Boolean {
+        return if (item.isNew) {
+            try {
+                userRepository.save(PedometerUser(1, item.id, item.pwd))
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        } else {
+            userRepository.findByIdAndPwd(item.id, item.pwd) != null
+        }
+
+    }
+
 }

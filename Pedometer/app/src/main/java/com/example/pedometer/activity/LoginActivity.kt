@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private val TAG = this::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,32 +27,39 @@ class LoginActivity : AppCompatActivity() {
 
     private fun init() {
         // is login
-        if(getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getBoolean(TEXT_IS_LOGIN, false)) goToMainActivity()
+        if (getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getBoolean(
+                TEXT_IS_LOGIN,
+                false
+            )
+        ) goToMainActivity()
         // is not login
         else {
             binding.showExistId = false
-            (application as BaseApplication).processCommunityId()
+            binding.isReadyNewId = false
             val pref = getSharedPreferences(TEXT_COMMUNITY_ID, Context.MODE_PRIVATE)
             if (pref.getString(TEXT_COMMUNITY_ID, null) != null) {
-                val communityId = pref.getString(TEXT_COMMUNITY_ID, null)!!
-                binding.etIdNew.setText(communityId)
+                setId(pref.getString(TEXT_COMMUNITY_ID, null)!!)
+            } else {
+                pref.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+                    if (key == TEXT_COMMUNITY_ID) {
+                        setId(sharedPreferences.getString(key, null)!!)
+                    }
+                }
+                (application as BaseApplication).processCommunityId()
             }
         }
 
     }
 
+    private fun setId(id: String) {
+        binding.isReadyNewId = true
+        binding.etIdNew.setText(id)
+    }
+
     private fun setClickEvent() {
         binding.btnLogin.setOnClickListener {
-            if (!validate() || !checkIdPwd()) AppMsgUtil.showErrorMsg(
-                "Please check your input id & pwd",
-                STATUS_FAIL,
-                this
-            )
-            else {
-                val pref = getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE)
-                pref.edit().putBoolean(TEXT_IS_LOGIN, true).apply()
-                goToMainActivity()
-            }
+            if (!validate()) return@setOnClickListener
+            checkIdPwd()
         }
         binding.swiChangeIdType.setOnCheckedChangeListener { _, isChecked ->
             binding.showExistId = isChecked
@@ -85,11 +93,26 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
-    private fun checkIdPwd(): Boolean {
+    private fun checkIdPwd() {
         val id = if (!binding.showExistId!!) binding.etIdNew.text.toString() // new id
         else binding.etIdExist.text.toString() // exist id
         val pwd = binding.etPassword.text.toString()
-        return APIHelper.isAbleLogin(id, pwd, this)
+
+        APIHelper.isAbleLogin(id, pwd, binding.showExistId, ::successLogin, ::failLogin)
+    }
+
+    private fun successLogin() {
+        val pref = getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE)
+        pref.edit().putBoolean(TEXT_IS_LOGIN, true).apply()
+        goToMainActivity()
+    }
+
+    private fun failLogin() {
+        AppMsgUtil.showErrorMsg(
+            "Please check your input id & pwd",
+            STATUS_FAIL,
+            this
+        )
     }
 
     private fun hideKeyboard() {

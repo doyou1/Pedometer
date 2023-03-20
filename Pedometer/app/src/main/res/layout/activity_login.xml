@@ -10,6 +10,10 @@
         <variable
             name="showExistId"
             type="Boolean" />
+
+        <variable
+            name="isReadyNewId"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +94,15 @@
                     android:layout_height="match_parent"
                     android:drawableStart="@drawable/ic_baseline_person_outline_24"
                     android:drawablePadding="5dp"
-                    android:gravity="center|start" />
+                    android:gravity="center|start"
+                    android:visibility="@{isReadyNewId ? View.VISIBLE : View.INVISIBLE}" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:progress="0"
+                    android:visibility="@{isReadyNewId ? View.GONE : View.VISIBLE}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

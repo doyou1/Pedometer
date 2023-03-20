@@ -2,10 +2,13 @@ package com.example.pedometer
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.util.*
 
 class BaseApplication : Application() {
+
+    private val TAG = this::class.java.simpleName
 
     override fun onCreate() {
         super.onCreate()
@@ -24,10 +27,6 @@ class BaseApplication : Application() {
     }
 
     fun processCommunityId() {
-        val pref = getSharedPreferences(TEXT_COMMUNITY_ID, Context.MODE_PRIVATE)
-        if (pref.getString(TEXT_COMMUNITY_ID, null) == null) {
-            val communityId = APIHelper.getNewCommunityId(DataUtil.getDeviceUUID(this))
-            pref.edit().putString(TEXT_COMMUNITY_ID, communityId).apply()
-        }
+        APIHelper.processNewCommunityId(DataUtil.getDeviceUUID(this), this)
     }
 }
