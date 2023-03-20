@@ -45,14 +45,26 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val currentDaily = RoomDBHelper.getCurrentDaily(requireContext())
             lifecycleScope.launch(Dispatchers.Main) {
+                Log.e(TAG, "currentDaily: $currentDaily")
                 setWeekGoal(currentDaily)
+                setEmptyChart()
             }
         }
+    }
 
-//        binding.btnPost.setOnClickListener {
-//            Log.e(TAG, "btn post")
-////            APIHelper.post()
-//        }
+    private fun setEmptyChart() {
+        binding.chartStep.description.isEnabled = false
+        // radius of the center hole in percent of maximum radius
+        binding.chartStep.holeRadius = HOLE_RADIUS_PIE_CHART
+        binding.chartStep.transparentCircleRadius = TRANSPARENT_CIRCLE_RADIUS_PIE_CHART
+        binding.chartStep.legend.isEnabled = false
+
+        // disable drag
+        binding.chartStep.isRotationEnabled = false
+        binding.chartStep.centerText = "${getCenterText(0)}"
+        binding.chartStep.data = getData(0)
+        binding.chartStep.animateY(DURATION_ANIMATION_Y)
+        binding.chartStep.invalidate()
     }
 
     override fun updateCurrentSteps(item: Pedometer?) {
