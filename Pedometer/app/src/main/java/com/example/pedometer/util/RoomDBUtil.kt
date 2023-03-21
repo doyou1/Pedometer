@@ -1,6 +1,8 @@
 package com.example.pedometer.util
 
 import android.util.Log
+import androidx.room.PrimaryKey
+import com.example.pedometer.retrofit.PedometerSteps
 import com.example.pedometer.room.Pedometer
 import com.example.pedometer.room.dto.StepsItem
 import com.google.gson.Gson
@@ -106,20 +108,20 @@ class RoomDBUtil {
             return sum
         }
 
-        fun computeMaxSteps(list: List<Pedometer>) : Int {
+        fun computeMaxSteps(list: List<Pedometer>): Int {
             var max = 0
-            for(item in list) {
+            for (item in list) {
                 val value = computeSteps(item)
-                if(max < value) {
+                if (max < value) {
                     max = value
                 }
             }
             return max
         }
 
-        fun computeSumSteps(list: List<Pedometer>) : Int {
+        fun computeSumSteps(list: List<Pedometer>): Int {
             var sum = 0
-            for(item in list) {
+            for (item in list) {
                 sum += computeSteps(item)
             }
             return sum
@@ -133,6 +135,18 @@ class RoomDBUtil {
                 result += "${step.hour} : ${step.steps} \n"
             }
             return result
+        }
+
+        fun convertPedometerStepsToPedometer(list: List<PedometerSteps>): List<Pedometer> {
+            val result = arrayListOf<Pedometer>()
+            for (item in list) {
+                result.add(
+                    Pedometer(
+                        0, item.timestamp, item.yyyymmdd, item.initSteps, item.steps
+                    )
+                )
+            }
+            return result.toList()
         }
     }
 }

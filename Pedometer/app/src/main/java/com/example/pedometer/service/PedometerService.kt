@@ -67,6 +67,11 @@ class PedometerService : Service(), SensorEventListener {
         registerReceiver(shutdownReceiver, filter);
     }
 
+    private fun unRegisterShutdownReceiver() {
+        unregisterReceiver(shutdownReceiver)
+    }
+
+
     private fun showPedometerNotification() {
         val context = this
         GlobalScope.launch(Dispatchers.IO) {
@@ -170,6 +175,7 @@ class PedometerService : Service(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         stopStepCounter()
+        unRegisterShutdownReceiver()
     }
 
 

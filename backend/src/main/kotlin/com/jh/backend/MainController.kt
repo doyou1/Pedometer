@@ -16,6 +16,9 @@ class MainController {
     @Autowired
     private lateinit var userRepository: UserRepository
 
+    @Autowired
+    private lateinit var stepsRepository: StepsRepository
+
     @RequestMapping("/getUsers", method = [RequestMethod.GET])
     fun home(): String {
         return personRepository.findAll().toString()
@@ -45,7 +48,16 @@ class MainController {
         } else {
             userRepository.findByIdAndPwd(item.id, item.pwd) != null
         }
+    }
 
+    @RequestMapping("/getExistData", method = [RequestMethod.POST])
+    fun getExistData(@RequestBody value: String): List<PedometerSteps> {
+        println("value: $value")
+
+        val result = stepsRepository.findByUserid(value)
+        println(result.toString())
+
+        return result
     }
 
 }

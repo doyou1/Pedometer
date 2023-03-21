@@ -2,6 +2,7 @@ package com.example.pedometer.room
 
 import android.content.Context
 import androidx.room.Room
+import com.example.pedometer.retrofit.PedometerSteps
 import com.example.pedometer.room.dto.Steps
 import com.example.pedometer.util.RoomDBUtil
 import com.example.pedometer.util.DataUtil
@@ -148,6 +149,18 @@ class RoomDBHelper {
                 TEXT_PEDOMETER
             ).build().pedometerDao()
             return@withContext db.getAll()
+        }
+
+        fun replaceUserData(list: List<PedometerSteps>, context: Context) {
+            val db = Room.databaseBuilder(
+                context.applicationContext,
+                AppDataBase::class.java,
+                TEXT_PEDOMETER
+            ).build().pedometerDao()
+            val old = db.getAll()
+            val new = RoomDBUtil.convertPedometerStepsToPedometer(list)
+            db.insertAll(new)
+            db.deleteAll(old)
         }
     }
 }

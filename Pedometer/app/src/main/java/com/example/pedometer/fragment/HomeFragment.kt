@@ -45,7 +45,6 @@ class HomeFragment : BaseFragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val currentDaily = RoomDBHelper.getCurrentDaily(requireContext())
             lifecycleScope.launch(Dispatchers.Main) {
-                Log.e(TAG, "currentDaily: $currentDaily")
                 setWeekGoal(currentDaily)
                 setEmptyChart()
             }

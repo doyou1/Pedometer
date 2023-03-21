@@ -10,4 +10,7 @@ interface UserService {
 
     @POST("api/isAbleLogin")
     fun isAbleLogin(@Body value: LoginUser): Call<Boolean>
+
+    @POST("api/getExistData")
+    fun getExistData(@Body value: String): Call<List<PedometerSteps>>
 }

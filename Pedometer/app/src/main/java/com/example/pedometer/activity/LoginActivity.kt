@@ -64,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
         binding.swiChangeIdType.setOnCheckedChangeListener { _, isChecked ->
             binding.showExistId = isChecked
         }
-
         binding.layoutWrap.setOnClickListener {
             if (it !is TextInputEditText && it !is TextInputLayout) {
                 hideKeyboard()
@@ -101,15 +100,21 @@ class LoginActivity : AppCompatActivity() {
         APIHelper.isAbleLogin(id, pwd, binding.showExistId, ::successLogin, ::failLogin)
     }
 
-    private fun successLogin() {
+    private fun successLogin(id: String) {
         val pref = getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE)
         pref.edit().putBoolean(TEXT_IS_LOGIN, true).apply()
-        goToMainActivity()
+        // when login with exist id
+        // get exist server data, replace room db data
+        if (binding.showExistId!!) {
+            APIHelper.processExistData(id, this, ::goToMainActivity)
+        } else {
+            goToMainActivity()
+        }
     }
 
     private fun failLogin() {
         AppMsgUtil.showErrorMsg(
-            "Please check your input id & pwd",
+            TEXT_ERROR_MSG,
             STATUS_FAIL,
             this
         )
@@ -121,5 +126,4 @@ class LoginActivity : AppCompatActivity() {
         im.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         currentFocus?.clearFocus()
     }
-
 }
