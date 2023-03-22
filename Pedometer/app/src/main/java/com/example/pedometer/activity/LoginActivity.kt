@@ -103,6 +103,8 @@ class LoginActivity : AppCompatActivity() {
     private fun successLogin(id: String) {
         val pref = getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE)
         pref.edit().putBoolean(TEXT_IS_LOGIN, true).apply()
+        pref.edit().putString(TEXT_LOGIN_ID, id).apply()
+
         // when login with exist id
         // get exist server data, replace room db data
         if (binding.showExistId!!) {

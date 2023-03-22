@@ -13,6 +13,7 @@ import android.os.IBinder
 import com.example.pedometer.R
 import com.example.pedometer.activity.MainActivity
 import com.example.pedometer.receiver.ShutdownReceiver
+import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.util.*
 import kotlinx.coroutines.Dispatchers

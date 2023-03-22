@@ -3,10 +3,9 @@ package com.example.pedometer.retrofit
 import android.content.Context
 import android.util.Log
 import com.example.pedometer.activity.LoginActivity
+import com.example.pedometer.room.Pedometer
 import com.example.pedometer.room.RoomDBHelper
-import com.example.pedometer.util.DataUtil
-import com.example.pedometer.util.RoomDBUtil
-import com.example.pedometer.util.TEXT_COMMUNITY_ID
+import com.example.pedometer.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.internal.synchronized
@@ -30,6 +29,53 @@ class APIHelper {
             val length = 8
             var result = DataUtil.convertUUIDToString(uuid, length)
             checkCommunityId(result, length, context)
+        }
+
+        fun addItem(item: Pedometer, context: Context) {
+            val id = context.getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getString(
+                TEXT_LOGIN_ID, null
+            )!!
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(UserService::class.java)
+            val call = service.addItem(item, id)
+            call.enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    response.body()?.let { isSuccess ->
+                        Log.d(TAG, "addItem isSuccess: $isSuccess")
+                    }
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
+        }
+
+        fun updateItem(item: Pedometer, context: Context) {
+            val id = context.getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getString(
+                TEXT_LOGIN_ID, null
+            )!!
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(UserService::class.java)
+            val call = service.updateItem(item, id)
+            call.enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    response.body()?.let { isSuccess ->
+                        Log.d(TAG, "updateItem isSuccess: $isSuccess")
+                    }
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
         }
 
         private fun checkCommunityId(id: String, length: Int, context: Context) {
@@ -118,6 +164,7 @@ class APIHelper {
                         }
                     }
                 }
+
                 override fun onFailure(call: Call<List<PedometerSteps>>, t: Throwable) {
                     t.printStackTrace()
                 }

@@ -1,6 +1,7 @@
 package com.jh.backend
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -51,13 +52,24 @@ class MainController {
     }
 
     @RequestMapping("/getExistData", method = [RequestMethod.POST])
-    fun getExistData(@RequestBody value: String): List<PedometerSteps> {
-        println("value: $value")
-
-        val result = stepsRepository.findByUserid(value)
+    fun getExistData(@RequestBody id: String): List<PedometerSteps> {
+        println("id: $id")
+        val result = stepsRepository.findByUserid(id)
         println(result.toString())
-
         return result
+    }
+
+    @RequestMapping("/addItem/{id}", method = [RequestMethod.POST])
+    fun addItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
+        println("item: $item id: $id")
+        return true
+    }
+
+    @RequestMapping("/updateItem/{id}", method = [RequestMethod.POST])
+    fun updateItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
+        println("item: $item id: $id")
+
+        return true
     }
 
 }
