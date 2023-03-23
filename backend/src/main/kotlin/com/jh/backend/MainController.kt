@@ -61,15 +61,27 @@ class MainController {
 
     @RequestMapping("/addItem/{id}", method = [RequestMethod.POST])
     fun addItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
-        println("item: $item id: $id")
+        val new = PedometerSteps(
+            -1, id, item.timestamp, item.yyyymmdd, item.initSteps, item.steps
+        )
+        stepsRepository.save(new)
         return true
     }
 
     @RequestMapping("/updateItem/{id}", method = [RequestMethod.POST])
     fun updateItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
         println("item: $item id: $id")
+        val old = stepsRepository.findByUseridAndTimestamp(id, item.timestamp)
 
-        return true
+        return if (old != null) {
+            val new = PedometerSteps(
+                old._id, id, old.timestamp, old.yyyymmdd, item.initSteps, item.steps
+            )
+            stepsRepository.save(new)
+            true
+        } else {
+            false
+        }
     }
 
 }
