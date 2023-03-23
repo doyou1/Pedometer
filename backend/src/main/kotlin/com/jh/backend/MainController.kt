@@ -38,6 +38,7 @@ class MainController {
 
     @RequestMapping("/isAbleLogin", method = [RequestMethod.POST])
     fun isAbleLogin(@RequestBody item: LoginUser): Boolean {
+        println("item: $item")
         return if (item.isNew) {
             try {
                 userRepository.save(PedometerUser(1, item.id, item.pwd))
@@ -53,8 +54,7 @@ class MainController {
 
     @RequestMapping("/getExistData", method = [RequestMethod.POST])
     fun getExistData(@RequestBody id: String): List<PedometerSteps> {
-        println("id: $id")
-        val result = stepsRepository.findByUserid(id)
+        val result = stepsRepository.findByUserid(id.replace("\"", ""))
         println(result.toString())
         return result
     }

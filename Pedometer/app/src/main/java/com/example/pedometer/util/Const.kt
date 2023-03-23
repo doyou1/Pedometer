@@ -68,3 +68,4 @@ const val MINIMUM_LENGTH_PASSWORD = 4
 const val TEXT_IS_LOGIN = "isLogin"
 const val TEXT_ERROR_MSG = "Please check your input id & pwd"
 const val TEXT_LOGIN_ID = "loginId"
+const val TEXT_REPLACE_USER_DATA = "replaceUserData"

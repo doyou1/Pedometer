@@ -146,6 +146,7 @@ class APIHelper {
         ) {
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val service = retrofit.create(UserService::class.java)
             val call = service.getExistData(id)
@@ -158,6 +159,9 @@ class APIHelper {
                         Log.e(TAG, "it: $it")
                         GlobalScope.launch(Dispatchers.IO) {
                             RoomDBHelper.replaceUserData(it, context)
+                            context.getSharedPreferences(TEXT_REPLACE_USER_DATA, Context.MODE_PRIVATE).edit().putBoolean(
+                                DateUtil.getFullToday(), true).apply()
+
                             GlobalScope.launch(Dispatchers.Main) {
                                 goToMainActivity()
                             }

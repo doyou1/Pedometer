@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,8 @@ class CommunityFragment : BaseFragment() {
     override val currentView: Int = FLAG_COMMUNITY
 
     private val addFriendsDialogActivityLauncher = getAddFriendsDialogActivityResultLauncher()
+
+    val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,7 +74,6 @@ class CommunityFragment : BaseFragment() {
     private fun setFragment(position: Int?) {
         position?.let {
             binding.showFrameLayout = false
-            val handler = Handler(Looper.getMainLooper())
             handler.postDelayed({
                 val transaction = childFragmentManager.beginTransaction()
                 val fragment = when (it) {
@@ -151,6 +153,11 @@ class CommunityFragment : BaseFragment() {
 //                }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacksAndMessages(null)
     }
 
     companion object {

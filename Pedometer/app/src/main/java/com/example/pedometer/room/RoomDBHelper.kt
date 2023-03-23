@@ -5,20 +5,15 @@ import androidx.room.Room
 import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.retrofit.PedometerSteps
 import com.example.pedometer.room.dto.Steps
-import com.example.pedometer.util.RoomDBUtil
-import com.example.pedometer.util.DataUtil
-import com.example.pedometer.util.DateUtil
-import com.example.pedometer.util.TEXT_PEDOMETER
+import com.example.pedometer.util.*
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class RoomDBHelper {
     companion object {
         private val TAG = this::class.java.simpleName
 
+        @OptIn(DelicateCoroutinesApi::class)
         fun process(context: Context, steps: Int) {
             val db = Room.databaseBuilder(
                 context.applicationContext,
@@ -29,7 +24,6 @@ class RoomDBHelper {
             GlobalScope.launch(Dispatchers.IO) {
                 // 오늘에 대한 레코드 있는지 확인
                 val result = db.existByDate(DateUtil.getCurrentTimestamp())
-
                 val currentTimestamp = DateUtil.getCurrentTimestamp()
                 // 레코드 없으면
                 if (result == 0) {
@@ -79,7 +73,16 @@ class RoomDBHelper {
                             item.steps = newSteps
                             db.update(item)
                         }
-                    } else {
+                    }
+                    else {
+                        // replace today?
+                        if(context.getSharedPreferences(TEXT_REPLACE_USER_DATA, Context.MODE_PRIVATE).getBoolean(DateUtil.getFullToday(), false)) {
+                            item.initSteps = steps
+                            db.update(item)
+                            GlobalScope.launch(Dispatchers.Main) {
+                                context.getSharedPreferences(TEXT_REPLACE_USER_DATA, Context.MODE_PRIVATE).edit().putBoolean(DateUtil.getFullToday(), false).apply()
+                            }
+                        }
                         val prevStepSum = RoomDBUtil.getPrevStepSum(item.steps)
                         val currentSteps = steps - (item.initSteps + prevStepSum)
                         // temp process for minus steps error
