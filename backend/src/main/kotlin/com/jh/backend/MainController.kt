@@ -20,6 +20,8 @@ class MainController {
     @Autowired
     private lateinit var stepsRepository: StepsRepository
 
+
+
     @RequestMapping("/getUsers", method = [RequestMethod.GET])
     fun home(): String {
         return personRepository.findAll().toString()
@@ -70,9 +72,7 @@ class MainController {
 
     @RequestMapping("/updateItem/{id}", method = [RequestMethod.POST])
     fun updateItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
-        println("item: $item id: $id")
         val old = stepsRepository.findByUseridAndTimestamp(id, item.timestamp)
-
         return if (old != null) {
             val new = PedometerSteps(
                 old._id, id, old.timestamp, old.yyyymmdd, item.initSteps, item.steps

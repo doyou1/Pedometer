@@ -9,9 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.pedometer.BaseApplication
 import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.databinding.ActivityLoginBinding
+import com.example.pedometer.room.RoomDBHelper
 import com.example.pedometer.util.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,16 +44,19 @@ class LoginActivity : AppCompatActivity() {
         else {
             binding.showExistId = false
             binding.isReadyNewId = false
+            val context = this
+
             val pref = getSharedPreferences(TEXT_COMMUNITY_ID, Context.MODE_PRIVATE)
             if (pref.getString(TEXT_COMMUNITY_ID, null) != null) {
                 setId(pref.getString(TEXT_COMMUNITY_ID, null)!!)
             } else {
-                pref.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
-                    if (key == TEXT_COMMUNITY_ID) {
-                        setId(sharedPreferences.getString(key, null)!!)
+                GlobalScope.launch(Dispatchers.IO) {
+                    val id =
+                        APIHelper.processNewCommunityId(DataUtil.getDeviceUUID(context), context)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        pref.edit().putString(TEXT_COMMUNITY_ID, id).apply()
                     }
                 }
-                (application as BaseApplication).processCommunityId()
             }
         }
 
@@ -97,19 +107,41 @@ class LoginActivity : AppCompatActivity() {
         val id = if (!binding.showExistId!!) binding.etIdNew.text.toString() // new id
         else binding.etIdExist.text.toString() // exist id
         val pwd = binding.etPassword.text.toString()
+        GlobalScope.launch(Dispatchers.IO) {
+            val isAbleLogin = APIHelper.isAbleLogin(id, pwd, binding.showExistId)
+            GlobalScope.launch(Dispatchers.Main) {
+                if (isAbleLogin != null) {
+                    if (isAbleLogin) successLogin(id)
+                    else failLogin()
+                } else failLogin()
+            }
+        }
 
-        APIHelper.isAbleLogin(id, pwd, binding.showExistId, ::successLogin, ::failLogin)
     }
 
     private fun successLogin(id: String) {
         val pref = getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE)
         pref.edit().putBoolean(TEXT_IS_LOGIN, true).apply()
         pref.edit().putString(TEXT_LOGIN_ID, id).apply()
-
+        val context = this
         // when login with exist id
         // get exist server data, replace room db data
         if (binding.showExistId!!) {
-            APIHelper.processExistData(id, this, ::goToMainActivity)
+            GlobalScope.launch(Dispatchers.IO) {
+                val result = APIHelper.processExistData(id)
+                if (result != null) {
+                    RoomDBHelper.replaceUserData(result, context)
+                    GlobalScope.launch(Dispatchers.Main) {
+                        context.getSharedPreferences(
+                            TEXT_REPLACE_USER_DATA,
+                            Context.MODE_PRIVATE
+                        ).edit().putBoolean(
+                            DateUtil.getFullToday(), true
+                        ).apply()
+                        goToMainActivity()
+                    }
+                }
+            }
         } else {
             goToMainActivity()
         }

@@ -25,13 +25,31 @@ class APIHelper {
     companion object {
         private val TAG = this::class.java.simpleName
         private const val baseUrl = "http://192.168.0.16:8080/"
-        fun processNewCommunityId(uuid: UUID, context: Context) {
+        fun processNewCommunityId(uuid: UUID, context: Context): String? {
             val length = 8
-            var result = DataUtil.convertUUIDToString(uuid, length)
-            checkCommunityId(result, length, context)
+            var id = DataUtil.convertUUIDToString(uuid, length)
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(UserService::class.java)
+            while (true) {
+                val call = service.isDuplicateId(id)
+                val isDuplicate = call.execute().body()
+                if (isDuplicate != null) {
+                    if (!isDuplicate) {
+                        break
+                    } else {
+                        id = DataUtil.increaseHexString(id, length)
+                    }
+                } else {
+                    return null
+                }
+            }
+            return id
         }
 
-        fun addItem(item: Pedometer, context: Context) {
+        fun addItem(item: Pedometer, context: Context): Boolean? {
             val id = context.getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getString(
                 TEXT_LOGIN_ID, null
             )!!
@@ -41,70 +59,20 @@ class APIHelper {
                 .build()
             val service = retrofit.create(UserService::class.java)
             val call = service.addItem(item, id)
-            call.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    response.body()?.let { isSuccess ->
-                        Log.d(TAG, "addItem isSuccess: $isSuccess")
-                    }
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            return call.execute().body()
         }
 
-        fun updateItem(item: Pedometer, context: Context) {
+        fun updateItem(item: Pedometer, context: Context): Boolean? {
             val id = context.getSharedPreferences(TEXT_IS_LOGIN, Context.MODE_PRIVATE).getString(
                 TEXT_LOGIN_ID, null
             )!!
-
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val service = retrofit.create(UserService::class.java)
             val call = service.updateItem(item, id)
-            call.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    response.body()?.let { isSuccess ->
-                        Log.d(TAG, "updateItem isSuccess: $isSuccess")
-                    }
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
-        }
-
-        private fun checkCommunityId(id: String, length: Int, context: Context) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val service = retrofit.create(UserService::class.java)
-            val call = service.isDuplicateId(id)
-            call.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    response.body()?.let { isDuplicate ->
-                        if (!isDuplicate) {
-                            saveCommunityId(id, context)
-                        } else {
-                            checkCommunityId(
-                                DataUtil.increaseHexString(id, length),
-                                length,
-                                context
-                            )
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    t.printStackTrace()
-                }
-
-            })
+            return call.execute().body()
         }
 
         private fun saveCommunityId(id: String, context: Context) {
@@ -115,10 +83,8 @@ class APIHelper {
         fun isAbleLogin(
             id: String,
             pwd: String,
-            showExistId: Boolean?,
-            successLogin: (String) -> Unit,
-            failLogin: () -> Unit
-        ) {
+            showExistId: Boolean?
+        ): Boolean? {
             // when new id login, reigster user
             // when exist id login, login user
             val retrofit = Retrofit.Builder()
@@ -127,53 +93,17 @@ class APIHelper {
                 .build()
             val service = retrofit.create(UserService::class.java)
             val call = service.isAbleLogin(LoginUser(id, pwd, isNew = !showExistId!!))
-            call.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    response.body()?.let { isAbleLogin ->
-                        if (isAbleLogin) successLogin(id)
-                        else failLogin()
-                    }
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            return call.execute().body()
         }
 
-        fun processExistData(
-            id: String, context: Context, goToMainActivity: () -> Unit
-        ) {
+        fun processExistData(id: String): List<PedometerSteps>? {
             val retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             val service = retrofit.create(UserService::class.java)
             val call = service.getExistData(id)
-            call.enqueue(object : Callback<List<PedometerSteps>> {
-                override fun onResponse(
-                    call: Call<List<PedometerSteps>>,
-                    response: Response<List<PedometerSteps>>
-                ) {
-                    response.body()?.let {
-                        Log.e(TAG, "it: $it")
-                        GlobalScope.launch(Dispatchers.IO) {
-                            RoomDBHelper.replaceUserData(it, context)
-                            context.getSharedPreferences(TEXT_REPLACE_USER_DATA, Context.MODE_PRIVATE).edit().putBoolean(
-                                DateUtil.getFullToday(), true).apply()
-
-                            GlobalScope.launch(Dispatchers.Main) {
-                                goToMainActivity()
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<List<PedometerSteps>>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            return call.execute().body()
         }
     }
-
 }
