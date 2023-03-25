@@ -55,4 +55,7 @@
     <string name="text_new_id">New ID</string>
     <string name="text_exist_id">Exist ID</string>
     <string name="text_logout">Logout</string>
+    <string name="text_title_chart_today">Today</string>
+    <string name="text_title_chart_daily">Daily</string>
+    <string name="text_title_chart_week">Week</string>
 </resources>

@@ -69,3 +69,30 @@ const val TEXT_IS_LOGIN = "isLogin"
 const val TEXT_ERROR_MSG = "Please check your input id & pwd"
 const val TEXT_LOGIN_ID = "loginId"
 const val TEXT_REPLACE_USER_DATA = "replaceUserData"
+
+val LIST_CHART_TODAY_X_VALUES = listOf<String>(
+    "00",
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+)

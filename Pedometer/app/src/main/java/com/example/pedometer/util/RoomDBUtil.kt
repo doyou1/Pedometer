@@ -148,5 +148,13 @@ class RoomDBUtil {
             }
             return result.toList()
         }
+
+        fun getMaxSteps(item: Pedometer): Int {
+            var max = 0
+            for (v in fromStepsJson(item.steps)) {
+                if (max < v.steps) max = v.steps
+            }
+            return max
+        }
     }
 }

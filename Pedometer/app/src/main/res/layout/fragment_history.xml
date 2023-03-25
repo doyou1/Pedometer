@@ -3,33 +3,90 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart_daily"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="30dp"
-            android:padding="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/chart_week"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/chart_week"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="30dp"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart_daily"
-            />
+            <TextView
+                android:id="@+id/tv_title_chart_today"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:text="@string/text_title_chart_today"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/chart_today"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart_today"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="30dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title_chart_daily"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_chart_today" />
+
+            <TextView
+                android:id="@+id/tv_title_chart_daily"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:text="@string/text_title_chart_daily"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/chart_daily"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chart_today" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart_daily"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="30dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title_chart_week"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_chart_daily" />
+
+            <TextView
+                android:id="@+id/tv_title_chart_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:text="@string/text_title_chart_week"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/chart_week"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chart_daily" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart_week"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="30dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_chart_week" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 
 </layout>

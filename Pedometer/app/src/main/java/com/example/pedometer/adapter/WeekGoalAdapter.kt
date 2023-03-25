@@ -20,7 +20,7 @@ class WeekGoalAdapter(private val _list: List<WeekGoal>, private val context: Co
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding =
             RvItemWeekGoalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.root.layoutParams.width = parent?.measuredWidth / 7
+        binding.root.layoutParams.width = parent.measuredWidth / 7
         return WeekGoalViewHolder(binding)
     }
 

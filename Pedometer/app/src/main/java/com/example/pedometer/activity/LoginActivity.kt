@@ -3,10 +3,8 @@ package com.example.pedometer.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pedometer.BaseApplication
 import com.example.pedometer.retrofit.APIHelper
 import com.example.pedometer.databinding.ActivityLoginBinding
 import com.example.pedometer.room.RoomDBHelper
@@ -16,9 +14,6 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 

@@ -20,8 +20,6 @@ class MainController {
     @Autowired
     private lateinit var stepsRepository: StepsRepository
 
-
-
     @RequestMapping("/getUsers", method = [RequestMethod.GET])
     fun home(): String {
         return personRepository.findAll().toString()
@@ -64,9 +62,11 @@ class MainController {
     @RequestMapping("/addItem/{id}", method = [RequestMethod.POST])
     fun addItem(@RequestBody item: Pedometer, @PathVariable id: String): Boolean {
         val new = PedometerSteps(
-            -1, id, item.timestamp, item.yyyymmdd, item.initSteps, item.steps
+            1, id, item.timestamp, item.yyyymmdd, item.initSteps, item.steps
         )
         stepsRepository.save(new)
+
+        println("addItem: $new")
         return true
     }
 
@@ -78,10 +78,15 @@ class MainController {
                 old._id, id, old.timestamp, old.yyyymmdd, item.initSteps, item.steps
             )
             stepsRepository.save(new)
+            println("updateItem: $new")
             true
         } else {
-            false
+            val new = PedometerSteps(
+                1, id, item.timestamp, item.yyyymmdd, item.initSteps, item.steps
+            )
+            stepsRepository.save(new)
+            println("update but no item -> addItem: $new")
+            true
         }
     }
-
 }

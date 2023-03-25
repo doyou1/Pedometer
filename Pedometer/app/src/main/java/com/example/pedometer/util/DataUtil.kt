@@ -74,6 +74,28 @@ class DataUtil {
             return periods
         }
 
+        fun getChartTodayDataSet(
+            xvalues: List<String>,
+            item: Pedometer,
+            context: Context
+        ): BarDataSet {
+            val barEntries = arrayListOf<BarEntry>()
+            for (i in xvalues.indices) {
+                val list = RoomDBUtil.fromStepsJson(item.steps)
+                val xvalue = xvalues[i]
+                var steps = 0
+                for (s in list) {
+                    if (s.hour == xvalue) {
+                        steps = s.steps
+                        break
+                    }
+                }
+                barEntries.add(BarEntry(i.toFloat(), steps.toFloat()))
+            }
+            return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
+        }
+
+
         fun getChartDailyDataSet(
             xvalues: List<String>,
             list: List<Pedometer>,
