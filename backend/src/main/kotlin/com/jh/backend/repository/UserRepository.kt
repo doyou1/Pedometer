@@ -1,5 +1,6 @@
-package com.jh.backend
+package com.jh.backend.repository
 
+import com.jh.backend.domain.PedometerUser
 import org.springframework.data.jpa.repository.JpaRepository
 
 

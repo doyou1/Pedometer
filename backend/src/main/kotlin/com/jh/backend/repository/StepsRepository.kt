@@ -1,5 +1,6 @@
-package com.jh.backend
+package com.jh.backend.repository
 
+import com.jh.backend.domain.PedometerSteps
 import org.springframework.data.jpa.repository.JpaRepository
 
 

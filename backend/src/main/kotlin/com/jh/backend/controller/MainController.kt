@@ -1,5 +1,11 @@
-package com.jh.backend
+package com.jh.backend.controller
 
+import com.jh.backend.domain.PedometerSteps
+import com.jh.backend.domain.PedometerUser
+import com.jh.backend.dto.LoginUser
+import com.jh.backend.dto.Pedometer
+import com.jh.backend.repository.StepsRepository
+import com.jh.backend.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,24 +18,10 @@ import org.springframework.web.bind.annotation.RestController
 class MainController {
 
     @Autowired
-    private lateinit var personRepository: PersonRepository
-
-    @Autowired
     private lateinit var userRepository: UserRepository
 
     @Autowired
     private lateinit var stepsRepository: StepsRepository
-
-    @RequestMapping("/getUsers", method = [RequestMethod.GET])
-    fun home(): String {
-        return personRepository.findAll().toString()
-    }
-
-    @RequestMapping("/post", method = [RequestMethod.POST])
-    fun post(@RequestBody list: List<Person>): List<Person> {
-        println("request list: $list")
-        return personRepository.findAll()
-    }
 
     @RequestMapping("/isDuplicateId", method = [RequestMethod.POST])
     fun isDuplicateId(@RequestBody value: String): Boolean {

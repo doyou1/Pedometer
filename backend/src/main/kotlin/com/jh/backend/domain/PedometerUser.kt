@@ -1,4 +1,4 @@
-package com.jh.backend
+package com.jh.backend.domain
 
 import jakarta.persistence.*
 
