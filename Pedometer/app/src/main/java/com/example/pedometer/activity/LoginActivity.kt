@@ -41,15 +41,12 @@ class LoginActivity : AppCompatActivity() {
             binding.isReadyNewId = false
             val context = this
 
-            val pref = getSharedPreferences(TEXT_COMMUNITY_ID, Context.MODE_PRIVATE)
-            if (pref.getString(TEXT_COMMUNITY_ID, null) != null) {
-                setId(pref.getString(TEXT_COMMUNITY_ID, null)!!)
-            } else {
-                GlobalScope.launch(Dispatchers.IO) {
-                    val id =
-                        APIHelper.processNewCommunityId(DataUtil.getDeviceUUID(context), context)
-                    GlobalScope.launch(Dispatchers.Main) {
-                        pref.edit().putString(TEXT_COMMUNITY_ID, id).apply()
+            GlobalScope.launch(Dispatchers.IO) {
+                val id =
+                    APIHelper.processNewCommunityId(DataUtil.getDeviceUUID(context), context)
+                GlobalScope.launch(Dispatchers.Main) {
+                    id?.let {
+                        setId(id)
                     }
                 }
             }

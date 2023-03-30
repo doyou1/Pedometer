@@ -95,6 +95,17 @@ class DataUtil {
             return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
         }
 
+        fun getChartTodayEmptyDataSet(
+            xvalues: List<String>,
+            context: Context
+        ): BarDataSet {
+            val barEntries = arrayListOf<BarEntry>()
+            for (i in xvalues.indices) {
+                barEntries.add(BarEntry(i.toFloat(), 0f))
+            }
+            return BarDataSet(barEntries, context.getString(R.string.text_bar_chart))
+        }
+
 
         fun getChartDailyDataSet(
             xvalues: List<String>,

@@ -49,6 +49,9 @@ class HistoryFragment : BaseFragment() {
                         if (currentToday != null) {
                             setChartToday(currentToday)
                             setChartTodayAverageLine()
+                        } else {
+                            setEmptyChartToday()
+                            setChartTodayAverageLine()
                         }
                         setChartDaily(currentDaily)
                         setChartDailyAverageLine()
@@ -414,6 +417,92 @@ class HistoryFragment : BaseFragment() {
             }
         }
         binding.chartWeek.axisLeft.addLimitLine(averageLine)
+    }
+
+    private fun setEmptyChartToday() {
+        val xvalue = LIST_CHART_TODAY_X_VALUES
+        val barDataset = DataUtil.getChartTodayEmptyDataSet(xvalue, requireContext())
+        // gradient bar color
+        barDataset.gradientColors = listOf(
+            GradientColor(
+                resources.getColor(R.color.app_color),
+                resources.getColor(R.color.app_orange)
+            )
+        )
+
+        // barData text visible false because of lineData duplication
+        val data = BarData(barDataset)
+        data.barWidth = SIZE_BAR_WIDTH
+        data.isHighlightEnabled = false
+        data.setValueFormatter(object : IndexAxisValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "${value.toInt()}"
+            }
+        })
+        binding.chartToday.data = data
+
+        binding.chartToday.description.isEnabled = false
+        binding.chartToday.legend.isEnabled = false
+        binding.chartToday.setScaleEnabled(false)
+        binding.chartToday.isDoubleTapToZoomEnabled = false
+
+        val goal = if (context != null && context?.getSharedPreferences(
+                activity?.getString(R.string.text_goal),
+                Context.MODE_PRIVATE
+            ) != null
+        ) {
+            context?.getSharedPreferences(
+                activity?.getString(R.string.text_goal),
+                Context.MODE_PRIVATE
+            )!!
+                .getInt(activity?.getString(R.string.text_goal), DEFAULT_GOAL) / 24
+        } else {
+            DEFAULT_GOAL / 24
+        }
+        val goalLine = LimitLine(goal.toFloat(), activity?.getString(R.string.text_goal))
+        goalLine.lineWidth = SIZE_GOAL_LINE_WIDTH
+        goalLine.textSize = SIZE_GOAL_LINE
+        goalLine.lineColor = resources.getColor(R.color.app_color)
+        goalLine.textColor = resources.getColor(R.color.app_color)
+        binding.chartToday.axisLeft.addLimitLine(goalLine)
+        binding.chartToday.axisLeft.setDrawAxisLine(false)
+        binding.chartToday.axisLeft.setDrawGridLines(false)
+        binding.chartToday.axisLeft.axisMinimum = 0f
+//        binding.chartToday.axisLeft.axisMaximum =
+//            if (RoomDBUtil.getMaxSteps(item) >= (goal + (goal / 10))) (RoomDBUtil.getMaxSteps(item) + (RoomDBUtil.getMaxSteps(
+//                item
+//            ) / 10).toFloat())
+//            else (goal + (goal / 10)).toFloat()
+        binding.chartToday.axisRight.isEnabled = false
+
+//        val chartRenderer = RoundBarChartRender(
+//            binding.chartToday,
+//            binding.chartToday.animator,
+//            binding.chartToday.viewPortHandler
+//        )
+//        chartRenderer.setRadius(SIZE_RADIUS)
+//        binding.chartToday.renderer = chartRenderer
+//        binding.chartToday.xAxis.textColor = resources.getColor(R.color.app_color)
+//        binding.chartToday.xAxis.spaceMin = SIZE_SPACE
+//        binding.chartToday.xAxis.spaceMax = SIZE_SPACE
+//        binding.chartToday.xAxis.valueFormatter = object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                val index = value.toInt()
+//                return xvalue[index]
+//            }
+//        }
+        binding.chartToday.xAxis.setDrawGridLines(false)
+        binding.chartToday.xAxis.setDrawAxisLine(false)
+        binding.chartToday.xAxis.textSize = TEXT_SIZE_X_AXIS
+        binding.chartToday.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        binding.chartToday.extraBottomOffset = EXTRA_BOTTOM_OFFSET
+        // xAxis print 6 item of one time, add horizontal scroll
+        binding.chartToday.setVisibleXRangeMaximum(SIZE_X_RANGE_MAXIMUM)
+        // show current hour's item
+        val currentHour = DateUtil.getCurrentHour().toInt()
+        val xViewPosition =
+            if (currentHour <= 3) 0f else if (currentHour > 3 && currentHour <= 21) (currentHour - 3).toFloat() else 24f
+        binding.chartToday.moveViewToX(xViewPosition)
     }
 
     companion object {
